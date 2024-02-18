@@ -12,7 +12,7 @@ class EntradaAnalogica : Pin {
 public:
     using Pin::Pin;
 
-    void setup() override;
+    void begin() override;
 
     unsigned int read();
 };

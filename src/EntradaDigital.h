@@ -8,7 +8,7 @@ class EntradaDigital : Pin {
 public:
     using Pin::Pin;
 
-    void setup() override;
+    void begin() override;
 
     int read();
 

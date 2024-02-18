@@ -7,10 +7,9 @@ protected:
     const int pin;
 public:
     explicit Pin(int _pin);
-    virtual void setup(); // virtual => obliga a ser redefinit en la classe filla
+    virtual void begin()=0; // virtual => obliga a ser redefinit en la classe filla
 
     int value;
 };
 
-
-#endif //CASA_DOMOTICA_PIN_H
+#endif

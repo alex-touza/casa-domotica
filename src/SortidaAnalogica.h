@@ -1,5 +1,5 @@
-#ifndef SortidaAnalogica_h
-#define SortidaAnalogica_h
+#ifndef CASA_DOMOTICA_SORTIDAANALOGICA_H
+#define CASA_DOMOTICA_SORTIDAANALOGICA_H
 
 #include <Arduino.h>
 #include "Pin.h"
@@ -8,7 +8,7 @@ class SortidaAnalogica : Pin {
 public:
     using Pin::Pin;
 
-    void setup() override;
+    void begin() override;
 
     void set(int valor);
 

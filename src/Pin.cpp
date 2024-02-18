@@ -4,6 +4,4 @@
 
 #include "Pin.h"
 
-Pin::Pin(int _pin) : pin(_pin) {}
-
-void Pin::setup() {}
+Pin::Pin(int _pin) : pin(_pin), value(0) {}

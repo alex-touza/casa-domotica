@@ -1,5 +1,5 @@
-#ifndef SortidaDigital_h
-#define SortidaDigital_h
+#ifndef CASA_DOMOTICA_SORTIDADIGITAL_H
+#define CASA_DOMOTICA_SORTIDADIGITAL_H
 
 #include <Arduino.h>
 #include "Pin.h"
@@ -8,7 +8,7 @@ class SortidaDigital : Pin {
 public:
     using Pin::Pin;
 
-    void setup() override;
+    void begin() override;
 
     void on();
 
@@ -46,7 +46,6 @@ public:
     */
     void pulseOut();
 
-    int estat;
 };
 
 #endif

@@ -1,7 +1,7 @@
 #include "SortidaDigital.h"
 #include "Arduino.h"
 
-void SortidaDigital::setup() {
+void SortidaDigital::begin() {
     pinMode(this->pin, OUTPUT);
 }
 
@@ -21,9 +21,9 @@ void SortidaDigital::off(unsigned long t) {
     this->set(LOW, t);
 }
 
-void SortidaDigital::set(int _estat) {
-    digitalWrite(this->pin, _estat);
-    this->estat = _estat;
+void SortidaDigital::set(int _value) {
+    digitalWrite(this->pin, _value);
+    this->value = _value;
 }
 
 void SortidaDigital::set(int _estat, unsigned long t) {
@@ -33,8 +33,8 @@ void SortidaDigital::set(int _estat, unsigned long t) {
 }
 
 int SortidaDigital::toggle() {
-    this->set(!this->estat);
-    return this->estat;
+    this->set(!this->value);
+    return this->value;
 }
 
 void SortidaDigital::pulseOut() {

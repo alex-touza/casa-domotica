@@ -2,10 +2,16 @@
 #include "Arduino.h"
 
 
-void EntradaDigital::setup() {
+void EntradaDigital::begin() {
     pinMode(this->pin, INPUT);
 }
 
-int EntradaDigital::read() { return digitalRead(this->pin); }
+int EntradaDigital::read() {
+    this->value = digitalRead(this->pin);
+    return this->value;
+}
 
-unsigned long EntradaDigital::pulseIn() { return ::pulseIn(this->pin, HIGH); }
+unsigned long EntradaDigital::pulseIn() {
+    this->value = 0;
+    return ::pulseIn(this->pin, HIGH);
+}

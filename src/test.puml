@@ -1,0 +1,12 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Pin {
+    #int pin
+    +Pin(int _pin)
+    +{abstract} void begin()
+}
+
+Pin <-- Entrada
+
+@enduml
