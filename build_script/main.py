@@ -1,16 +1,22 @@
 from shutil import copytree
 from glob import glob
-from os import rename
-from os.path import abspath, join
+from os import rename, chdir
+from pathlib import Path
+from os.path import abspath, join, isdir
+from shutil import rmtree
 from colorama import init
 from text import Colors, Estils, titol
 from postprocessing import Rename, FindReplace
 
 init()
 
+chdir(Path(__file__).parent.resolve())
+
 ORIGIN_PATH = "../src"
 PROJECT_NAME = "casa-domotica"
+
 DESTINATION_PATH = f"../dist/{PROJECT_NAME}"
+ORIGIN_ROOT_NAME = ORIGIN_PATH.split('/')[-1]
 
 sourceFiles = {"headers": "h", "source": "cpp"}
 
@@ -28,23 +34,64 @@ for k, v in {"Project name": PROJECT_NAME, "Origin path": ORIGIN_PATH, "Destinat
 
 print()
 
-for k, ext in sourceFiles.items():
-    titol(k.upper())
-    for f in [abspath(p) for p in glob(f"./src/*.{ext}")]:
-        print(Colors.blau(f))
+if isdir(DESTINATION_PATH):
+    Colors.groc()
+    print("WARNING: Destination path already exists.\nCurrent content will be removed.")
+    input("Press enter to confirm...")
+    Colors.reset()
+    try:
+        rmtree(DESTINATION_PATH)
+    except Exception as e:
+        Colors.error()
+        print(f"Error occured while clearing destination path.")
+        print(e)
+        Colors.reset()
+        exit(1)
+
+    print()
+    print(Colors.verd("Destination path cleared successfully."))
     print()
 
-print()
+
+for k, ext in sourceFiles.items():
+    titol(k.upper())
+    for f in [abspath(p) for p in glob(f"{ORIGIN_PATH}/*.{ext}")]:
+        spl = f.rfind(ORIGIN_ROOT_NAME)
+        print(Colors.blau(f[spl + len(ORIGIN_ROOT_NAME) + 1:]))
+    print()
+
 titol("POSTPROCESSING RULES")
 
-for s in postprocessing:
-    print(s)
+for i, s in enumerate(postprocessing):
+    print(f"#{i} {s}")
 
 print()
 input(Colors.blau("Press enter to initiate the copy...") + Colors.groc)
 Colors.reset()
-copytree(ORIGIN_PATH, DESTINATION_PATH, dirs_exist_ok=True)
-copytree('../lib', DESTINATION_PATH + '/lib')
 
-for s in postprocessing:
-    s(DESTINATION_PATH)
+try:
+    copytree(ORIGIN_PATH, DESTINATION_PATH, dirs_exist_ok=True)
+except Exception as e:
+    print(Colors.error(f"Error occured while copying."))
+    print(e)
+    exit(1)
+
+n_errors = 0
+
+for i, s in enumerate(postprocessing):
+    try:
+        s(DESTINATION_PATH)
+    except Exception as e:
+        n_errors += 1
+        Colors.error()
+        print(f"Error occured in postprocessing rule #{i}.")
+        print(e)
+        Colors.reset()
+
+print()
+
+if n_errors:
+    print(Colors.groc(f"Code copied with {n_errors} error(s)."))
+else:
+    print(Colors.verd("Code copied successfully."))
+

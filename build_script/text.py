@@ -3,7 +3,6 @@ from colorama import Fore, Style
 
 
 class Modificador:
-
 	def __init__(self, c: str, r: str = Style.RESET_ALL):
 		self.c = c
 		self.r = r
