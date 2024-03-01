@@ -1,43 +1,43 @@
 #include "SortidaDigital.h"
 #include "Arduino.h"
 
-void SortidaDigital::begin() {
+void CDPins::SortidaDigital::begin() {
     pinMode(this->pin, OUTPUT);
 }
 
-void SortidaDigital::on() {
+void CDPins::SortidaDigital::on() {
     this->set(HIGH);
 }
 
-void SortidaDigital::off() {
+void CDPins::SortidaDigital::off() {
     this->set(LOW);
 }
 
-void SortidaDigital::on(unsigned long t) {
+void CDPins::SortidaDigital::on(unsigned long t) {
     this->set(HIGH, t);
 }
 
-void SortidaDigital::off(unsigned long t) {
+void CDPins::SortidaDigital::off(unsigned long t) {
     this->set(LOW, t);
 }
 
-void SortidaDigital::set(int _value) {
+void CDPins::SortidaDigital::set(int _value) {
     digitalWrite(this->pin, _value);
     this->value = _value;
 }
 
-void SortidaDigital::set(int _estat, unsigned long t) {
+void CDPins::SortidaDigital::set(int _estat, unsigned long t) {
     this->set(_estat);
     delay(t);
     this->set(!_estat);
 }
 
-int SortidaDigital::toggle() {
+int CDPins::SortidaDigital::toggle() {
     this->set(!this->value);
     return this->value;
 }
 
-void SortidaDigital::pulseOut() {
+void CDPins::SortidaDigital::pulseOut() {
     this->on();
     delayMicroseconds(10);
     this->off();

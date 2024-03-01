@@ -8,14 +8,17 @@
 #include "Arduino.h"
 #include "Pin.h"
 
-class EntradaAnalogica : Pin {
-public:
-    using Pin::Pin;
+namespace CDPins {
+    class EntradaAnalogica : public Pin {
+    public:
+        using Pin::Pin;
 
-    void begin() override;
+        void begin() override;
 
-    unsigned int read();
-};
+        unsigned int read();
+    };
+}
+
 
 
 #endif //CASA_DOMOTICA_ENTRADAANALOGICA_H

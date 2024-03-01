@@ -4,17 +4,20 @@
 #include <Arduino.h>
 #include "Pin.h"
 
-class SortidaAnalogica : Pin {
-public:
-    using Pin::Pin;
+namespace CDPins {
+    class SortidaAnalogica : public Pin {
+    public:
+        using Pin::Pin;
 
-    void begin() override;
+        void begin() override;
 
-    void set(int valor);
+        void set(int valor);
 
-    void set(int valor, int min, int max);
+        void set(int valor, int min, int max);
 
-    int value;
-};
+        int value;
+    };
+}
+
 
 #endif

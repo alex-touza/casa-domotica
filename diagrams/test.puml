@@ -1,0 +1,45 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+namespace CDPins {
+	abstract class Pin{
+
+	    # int pin
+	    + Pin(int _pin)
+	    + {abstract} void begin()
+	}
+
+	class EntradaAnalògica {}
+	class SortidaAnalògica {}
+	class EntradaDigital {}
+	class SortidaDigital {}
+}
+
+
+class Joystick {
+    - int deadzone
+    # EntradaAnalogica pinX
+    # EntradaAnalogica pinY
+    + bool read()
+    + int posX
+    + int posY
+}
+
+class Joystick {}
+
+class NeoPixel {}
+
+class Range {}
+
+class Pantalla {}
+
+class TempHum {}
+
+Pin <|-- EntradaDigital
+Pin <|-- EntradaAnalògica
+Pin <|-- SortidaDigital
+Pin <|-- SortidaAnalògica
+
+Joystick "2" o-- EntradaAnalògica
+
+@enduml

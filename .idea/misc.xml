@@ -5,13 +5,15 @@
   </component>
   <component name="CidrRootsConfiguration">
     <sourceRoots>
-      <file path="$PROJECT_DIR$/lib" />
       <file path="$PROJECT_DIR$/src" />
     </sourceRoots>
     <libraryRoots>
+      <file path="$PROJECT_DIR$/lib" />
       <file path="$PROJECT_DIR$/lib/Adafruit_Unified_Sensor-1.1.14" />
+      <file path="$PROJECT_DIR$/lib/FastLED-3.6.0" />
     </libraryRoots>
     <excludeRoots>
+      <file path="$PROJECT_DIR$/.pio" />
       <file path="$PROJECT_DIR$/dist" />
     </excludeRoots>
   </component>

@@ -4,4 +4,4 @@
 
 #include "Pin.h"
 
-Pin::Pin(int _pin) : pin(_pin), value(0) {}
+CDPins::Pin::Pin(int _pin) : pin(_pin), value(0) {}

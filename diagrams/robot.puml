@@ -1,0 +1,59 @@
+@startuml
+start
+group Inicialització
+	:Llegir **codi** de desactivació; <<input>>
+	repeat
+	:Llegir **velocitat** en m/s; <<input>>
+	backward://La velocitat ha de ser entre 0.5 i 4//; <<output>>
+	repeat while (**velocitat** > 4 or **velocitat** < 0.5)
+endgroup
+
+repeat
+
+group Detecció de la nit
+	:Llegir **llum** del sensor de llum; <<load>>
+if (És de nit? (**llum**)) is (sí) then
+	:Apagar **llum groc**;
+	stop
+else (no)
+endif
+endgroup
+
+group Moviment del robot
+	:Llegir **distància** del sensor d'infrarojos; <<load>>
+	if (**velocitat** < **distància**) is (Sí) then
+	  :Gira 90º CW;
+	  :Avança **velocitat** m durant 1 segon;
+	  :Gira 90º CW;
+	else (No)
+	  :Avança **velocitat** m durant 1 segon;
+	endif
+endgroup
+
+group Detecció de moviment
+	:Llegir **moviment** del sensor de moviment; <<load>>
+	if (**moviment**?) is (No) then
+		if (Està el **llum groc** encès?) is (Sí) then
+		  :Apagar **llum groc**;
+		else (No)
+		  :Encendre **llum groc**;
+		endif
+	else (Sí)
+		group Alerta
+			:Fer sonar **sirena**;
+			:Apagar **llum groc**;
+			:Encendre **llum vermell**;
+			://S'ha detectat moviment//; <<output>>
+			repeat
+				:Llegir **codi introduït**; <<input>>
+				backward://Codi erroni//; <<output>>
+			repeat while (**codi** == **codi introduït**) is (Fals)
+
+			:Apagar **llum vermell**;
+			:Apagar **sirena**;
+			://Alarma desactivada//; <<output>>
+			stop
+		endgroup
+
+end
+@enduml

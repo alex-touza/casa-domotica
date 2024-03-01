@@ -39,7 +39,6 @@ class Colors:
 	groc = Modificador(Fore.YELLOW)
 	gris = Modificador(Fore.LIGHTBLACK_EX)
 	verd = Modificador(Fore.GREEN)
-	groc = Modificador(Fore.LIGHTYELLOW_EX)
 
 	error = Modificador(Fore.RED)
 

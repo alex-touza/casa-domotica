@@ -5,11 +5,10 @@
 #include "EntradaAnalogica.h"
 #include "Arduino.h"
 
-void EntradaAnalogica::begin() {
+void CDPins::EntradaAnalogica::begin() {
     pinMode(this->pin, INPUT);
 }
 
-unsigned int EntradaAnalogica::read() {
-    this->value = analogRead(this->pin);
-    return this->value;
+unsigned int CDPins::EntradaAnalogica::read() {
+    return this->value = analogRead(this->pin);
 }

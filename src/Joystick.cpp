@@ -5,22 +5,57 @@
 #include "Joystick.h"
 
 Joystick::Joystick(int _pinX, int _pinY, int _deadzone = 10) : deadzone(_deadzone
-) {
+), pos({0, 0}) {
     this->pinX = new EntradaAnalogica(_pinX);
     this->pinY = new EntradaAnalogica(_pinY);
 }
 
 bool Joystick::read() {
-    // Declarem les funcions amb lambda per no repetir-les per cada eix.
-    // [this] captura la instància de la classe.
-    auto read = [](EntradaAnalogica* pin) -> int { return ::map(pin->read(), 0, 4095, -100, 100); };
-    auto round = [this](int pos) -> int { return abs(((pos))) > this->deadzone ? pos : 0; };
+    // Operador OR que no curtcircuita perquè s'evaluïn els dos
+    // operands.
+    // Clever code > readability
+    return read(X) | read(Y);
+}
 
-    int prevX = this->posX;
-    int prevY = this->posY;
+bool Joystick::read(Axis axis) {
+    int* posAxis = getPosPtr(axis);
+    EntradaAnalogica* pin = axis == X ? this->pinX : this->pinY;
 
-    this->posX = round(read(this->pinX));
-    this->posY = round(read(this->pinY));
+    // [=] fa que es puguin accedir a les mateixes variables (com 'this')
+    // que des de fora de la lambda.
+    // Aplicar la deadzone
+    auto round = [=](int _pos) -> int { return abs(_pos) > this->deadzone ? _pos : 0; };
 
-    return prevX != this->posX || prevY != this->posY;
+    int prev = *posAxis;
+
+    *posAxis = round(::map((int)pin->read(), 0, 4095, -100, 100));
+
+
+     if (*posAxis == prev) {
+         return millis() - (axis == X ? this->lastUpdated.x : this->lastUpdated.y) > 500;
+     } else {
+         (axis == X ? this->lastUpdated.x : this->lastUpdated.y) = millis();
+         return true;
+     }
+}
+
+void Joystick::begin() {
+    this->pinX->begin();
+    this->pinY->begin();
+}
+
+// Aquest és el mètode privat, usat per accedir fàcilment
+// a un valor.
+
+// TODO Utilitzar template perquè es pugui utilitzar també per a lastUpdated
+int* Joystick::getPosPtr(Axis axis) {
+    return axis == X ? &this->pos.x : &this->pos.y;
+
+}
+
+// Aquest és el mètode públic. No hauríem de voler canviar la
+// posició des de fora de la classe; per això es retorna un
+// punter constant.
+const int* Joystick::getPos(Axis axis) {
+    return getPosPtr(axis);
 }
