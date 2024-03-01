@@ -1,0 +1,127 @@
+@startuml
+skinparam dpi 500
+skinparam linetype ortho
+'https://plantuml.com/class-diagram
+
+set separator ::
+
+abstract class CDPins::Pin{
+    # int pin
+    + Pin(int _pin)
+    + {abstract} void begin()
+}
+
+class CDPins::EntradaAnalògica {}
+class CDPins::SortidaAnalògica {}
+class CDPins::EntradaDigital {}
+class CDPins::SortidaDigital {}
+
+
+struct Pos<T> {
+	T x
+	T y
+}
+
+enum Axis {
+	X
+	Y
+}
+
+class Joystick {
+    - int deadzone
+    - int* getPosPtr(Axis axis)
+    - Pos<int> pos
+    # EntradaAnalogica* pinX
+    # EntradaAnalogica* pinY
+    + Joystick(int _pinX, int _pinY, int deadzone)
+    + bool read(Axis axis)
+    + bool read()
+    + Pos<unsigned long> lastChanged
+    + const int* getPos(Axis axis)
+}
+
+together {
+	package FastLED <<rectangle>> #EEE {
+		class FastLED <<extern>> {}
+		hide FastLED members
+
+		class CRGB <<extern>> {}
+		hide FastLED members
+	}
+
+
+	class NeoPixel {
+		+ void begin()
+		+ void refresh()
+		+ CRGB list[]
+	}
+}
+
+package DHT <<rectangle>> #EEE {
+	class DHT <<extern>> {}
+	hide DHT members
+}
+
+class Range {
+	- int size;
+	- bool cycle
+	- const int* range
+	+ Range(const int _range[], int _size, bool _cycle)
+	+ int getLevel(int n)
+}
+
+package LiquidCrystal_I2C <<rectangle>> #EEE {
+	class LiquidCrystal_I2C <<extern>> {}
+	hide LiquidCrystal_I2C members
+}
+
+class Pantalla {
+	- unsigned long t
+	- unsigned long maxT
+	- TempHum* tempHum
+	- int* tempSetting
+	+ Pantalla(TempHum* _tempHum, int* _tempSetting)
+	+ void begin()
+	+ void update(string upperLine, string lowerLine)
+    + void update(string upperLine, string lowerLine, unsigned long t)
+    + void idle()
+    + void checkTime()
+}
+
+class TempHum {
+	- CRGB* ledTemp
+	- CRGB* ledHum
+	- {static} const int tempRange
+	- {static} const int humRange
+	- CRGB colors[]
+	- Range* tempRange
+	- Range* humRange
+	# int pin
+	+ TempHum(int _pin, CRGB* _ledTemp, CRGB* _ledHum)
+	+ void begin()
+	+ bool read()
+	+ double temp
+	+ double hum
+}
+
+EntradaAnalògica <|-- Pin
+SortidaAnalògica <|-- Pin
+EntradaDigital <|-- Pin
+SortidaDigital <|-- Pin
+
+Joystick "2" *-- EntradaAnalògica
+Joystick *-- Pos
+Joystick --- Axis
+
+NeoPixel *-- FastLED::CRGB
+NeoPixel --- FastLED::FastLED
+
+Pantalla <|-- LiquidCrystal_I2C
+Pantalla *-- TempHum
+
+TempHum <|-- DHT
+TempHum *-- Range
+TempHum *-- CRGB
+
+
+@enduml

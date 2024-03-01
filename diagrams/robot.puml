@@ -1,16 +1,18 @@
 @startuml
+skinparam dpi 500
 start
-group Inicialització
+group #FFF Inicialització
 	:Llegir **codi** de desactivació; <<input>>
 	repeat
 	:Llegir **velocitat** en m/s; <<input>>
 	backward://La velocitat ha de ser entre 0.5 i 4//; <<output>>
-	repeat while (**velocitat** > 4 or **velocitat** < 0.5)
+	repeat while (**velocitat** > 4 or **velocitat** < 0.5) is (Cert)
+	->Fals;
 endgroup
 
 repeat
 
-group Detecció de la nit
+group #FFF Detecció de la nit
 	:Llegir **llum** del sensor de llum; <<load>>
 if (És de nit? (**llum**)) is (sí) then
 	:Apagar **llum groc**;
@@ -19,9 +21,9 @@ else (no)
 endif
 endgroup
 
-group Moviment del robot
+group #FFF Moviment del robot
 	:Llegir **distància** del sensor d'infrarojos; <<load>>
-	if (**velocitat** < **distància**) is (Sí) then
+	if (**velocitat** > **distància**) is (Sí) then
 	  :Gira 90º CW;
 	  :Avança **velocitat** m durant 1 segon;
 	  :Gira 90º CW;
@@ -30,16 +32,16 @@ group Moviment del robot
 	endif
 endgroup
 
-group Detecció de moviment
+group #FFF Detecció de moviment
 	:Llegir **moviment** del sensor de moviment; <<load>>
 	if (**moviment**?) is (No) then
-		if (Està el **llum groc** encès?) is (Sí) then
+		if (**llum groc** encès?) is (Sí) then
 		  :Apagar **llum groc**;
 		else (No)
 		  :Encendre **llum groc**;
 		endif
 	else (Sí)
-		group Alerta
+		group #FFF Alerta
 			:Fer sonar **sirena**;
 			:Apagar **llum groc**;
 			:Encendre **llum vermell**;
@@ -48,6 +50,7 @@ group Detecció de moviment
 				:Llegir **codi introduït**; <<input>>
 				backward://Codi erroni//; <<output>>
 			repeat while (**codi** == **codi introduït**) is (Fals)
+			->Cert;
 
 			:Apagar **llum vermell**;
 			:Apagar **sirena**;
