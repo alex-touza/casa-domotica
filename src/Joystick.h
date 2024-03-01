@@ -24,6 +24,8 @@ class Joystick {
 private:
     int deadzone;
 
+    Pos<int> pos;
+
     // Obtenir accés d'escriptura-lectura a la posició d'un eix
     int* getPosPtr(Axis axis);
 
@@ -39,9 +41,7 @@ public:
     bool read(Axis axis); // Llegir un eix
     bool read();          // Llegir els dos eixos
 
-    Pos<int> pos;
-
-    Pos<unsigned long> lastUpdated;
+    Pos<unsigned long> lastChanged;
 
     // Obtenir accés de només lectura a la posició d'un eix
     const int* getPos(Axis axis);

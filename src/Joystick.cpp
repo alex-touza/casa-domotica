@@ -32,9 +32,9 @@ bool Joystick::read(Axis axis) {
 
 
      if (*posAxis == prev) {
-         return millis() - (axis == X ? this->lastUpdated.x : this->lastUpdated.y) > 500;
+         return millis() - (axis == X ? this->lastChanged.x : this->lastChanged.y) > 500;
      } else {
-         (axis == X ? this->lastUpdated.x : this->lastUpdated.y) = millis();
+         (axis == X ? this->lastChanged.x : this->lastChanged.y) = millis();
          return true;
      }
 }
@@ -47,7 +47,7 @@ void Joystick::begin() {
 // Aquest és el mètode privat, usat per accedir fàcilment
 // a un valor.
 
-// TODO Utilitzar template perquè es pugui utilitzar també per a lastUpdated
+// TODO Utilitzar template perquè es pugui utilitzar també per a lastChanged
 int* Joystick::getPosPtr(Axis axis) {
     return axis == X ? &this->pos.x : &this->pos.y;
 
