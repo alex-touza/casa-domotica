@@ -6,38 +6,64 @@ skinparam linetype ortho
 set separator ::
 
 abstract class CDPins::Pin{
-    # int pin
+    # const int pin
     + Pin(int _pin)
     + {abstract} void begin()
+    + int value
 }
 
-class CDPins::EntradaAnalògica {}
-class CDPins::SortidaAnalògica {}
-class CDPins::EntradaDigital {}
-class CDPins::SortidaDigital {}
-
-
-struct Pos<T> {
-	T x
-	T y
+class CDPins::EntradaDigital {
+	+ void begin()
+	+ int read()
+	+ unsigned int pulseIn()
 }
 
-enum Axis {
-	X
-	Y
+class CDPins::EntradaAnalògica {
+	+ void begin()
+	+ unsigned int read()
 }
 
-class Joystick {
-    - int deadzone
-    - int* getPosPtr(Axis axis)
-    - Pos<int> pos
-    # EntradaAnalogica* pinX
-    # EntradaAnalogica* pinY
-    + Joystick(int _pinX, int _pinY, int deadzone)
-    + bool read(Axis axis)
-    + bool read()
-    + Pos<unsigned long> lastChanged
-    + const int* getPos(Axis axis)
+class CDPins::SortidaDigital {
+	+ void begin()
+	+ void on()
+	+ void off()
+	+ void on(unsigned long t)
+	+ void off(unsigned long t)
+	+ void set(int estat)
+	+ void set(int estat, unsigned long t)
+	+ int toggle()
+	+ void pulseOut()
+}
+
+class CDPins::SortidaAnalògica {
+	+ void begin()
+	+ void set(int valor)
+	+ void set(int valor, int min, int max)
+}
+
+together {
+	struct Pos<T> {
+    	T x
+    	T y
+    }
+
+    enum Axis {
+    	X
+    	Y
+    }
+
+    class Joystick {
+        - int deadzone
+        - int* getPosPtr(Axis axis)
+        - Pos<int> pos
+        # EntradaAnalogica* pinX
+        # EntradaAnalogica* pinY
+        + Joystick(int _pinX, int _pinY, int deadzone)
+        + bool read(Axis axis)
+        + bool read()
+        + Pos<unsigned long> lastChanged
+        + const int* getPos(Axis axis)
+    }
 }
 
 together {
@@ -103,14 +129,16 @@ class TempHum {
 	+ double temp
 	+ double hum
 }
-
+note right of TempHum
+S'hauria de dividir per a cada mesura
+end note
 EntradaAnalògica <|-- Pin
 SortidaAnalògica <|-- Pin
-EntradaDigital <|-- Pin
+EntradaDigital <|-up- Pin
 SortidaDigital <|-- Pin
 
 Joystick "2" *-- EntradaAnalògica
-Joystick *-- Pos
+Joystick "2" *-- Pos
 Joystick --- Axis
 
 NeoPixel *-- FastLED::CRGB
@@ -123,5 +151,17 @@ TempHum <|-- DHT
 TempHum *-- Range
 TempHum *-- CRGB
 
+'hide NeoPixel members
+'hide Pantalla members
+'hide TempHum members
+'hide Range members
+'hide Joystick members
+'hide EntradaDigital members
+'hide SortidaDigital members
+'hide EntradaAnalògica members
+'hide SortidaAnalògica members
+'hide Pin members
+'hide Pos members
+'hide Axis members
 
 @enduml
