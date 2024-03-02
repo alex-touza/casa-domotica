@@ -20,14 +20,14 @@ class FindReplace:
         with open(root + self.path, 'w') as file:
             file.write(s)
 
-
-
-
     def __str__(self):
         return Colors.gris('Find and replace -- ') + Colors.blau(self.path) + Colors.gris(':') + ''.join(
             [('\n\t' + Colors.groc(
                 old) + Colors.gris(
                 ' => ') + (Colors.gris('(empty)') if new == "" else Colors.verd(new))) for old, new in self.pairs])
+
+    def repr(self):
+        return f"Find and replace -- {self.path} -- {len(self.pairs)} pairs"
 
 
 class Rename:
@@ -40,3 +40,6 @@ class Rename:
 
     def __str__(self):
         return Colors.gris('Rename -- ') + Colors.blau(self.oldPath) + Colors.gris(' => ') + Colors.verd(self.newPath)
+
+    def repr(self):
+        return f"Rename -- {self.oldPath} => {len(self.newPath)}"

@@ -51,5 +51,6 @@ class Estils:
 
 
 def titol(text: str):
+	print()
 	print(Estils.brillant(text))
 	print("----------------")
