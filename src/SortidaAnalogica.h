@@ -14,8 +14,6 @@ namespace CDPins {
         void set(int valor);
 
         void set(int valor, int min, int max);
-
-        int value;
     };
 }
 
