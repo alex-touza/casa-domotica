@@ -12,7 +12,6 @@ CDPins::EntradaDigital obstacles(5);
 CDPins::EntradaDigital botoAlarma(23);
 Joystick joystick(34, 35, 10);
 
-
 NeoPixel leds;
 TempHum dht(14, &leds.list[0], &leds.list[1]);
 Pantalla pantalla(&dht, &TEMP);
