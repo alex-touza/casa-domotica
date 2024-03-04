@@ -31,16 +31,19 @@ Codi font.
 El codi font d'aquestes llibreries es troba a la carpeta [`~/lib`](./lib).
 
 ## Requeriments
+
 - Python 3.11 o superior
-  - [`colorama`](https://pypi.org/project/colorama/)
+    - [`colorama`](https://pypi.org/project/colorama/)
 - Arduino IDE
 
 ## Execució
 
 1. Copieu el contingut de `~/lib` a la carpeta corresponent d'Arduino (e.g. `Arduino/libraries`) perquè el projecte
    compili correctament.
-2. Executeu [`~/build_script/main.py`](./build_script/main.py). Comproveu que teniu el paquet `colorama` instal·lat.
-3. 
+2. Instal·leu la placa ESP32 a Arduino IDE.
+2. Executeu [`~/build_script/main.py`](./build_script/main.py) i seguiu les instruccions. Comproveu que teniu el
+   paquet `colorama` instal·lat. Alternativament, també podeu descarregar una distribució del projecte des de Releases.
+3. Obriu la carpeta `~/dist/casa-domotica` a Arduino IDE i compileu.
 
 ## Autors
 
