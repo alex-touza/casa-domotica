@@ -19,7 +19,7 @@ PROJECT_NAME = "casa-domotica"
 DESTINATION_PATH = f"./dist/{PROJECT_NAME}"
 ORIGIN_DIR_NAME = ORIGIN_PATH.split('/')[-1]
 
-ROOT_ABS = abspath("../")
+ROOT_ABS = abspath(ROOT)
 ORIGIN_PATH_ABS = abspath(join(ROOT_ABS, ORIGIN_PATH))
 DESTINATION_PATH_ABS = abspath(join(ROOT_ABS, DESTINATION_PATH))
 
