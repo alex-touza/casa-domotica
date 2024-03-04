@@ -148,13 +148,11 @@ class Temperatura {
 	+ void begin()
 	+ void read()
 }
-note right of TempHum
-S'hauria de dividir per a cada mesura
-end note
-EntradaAnalògica <|-- Pin
-SortidaAnalògica <|-- Pin
-EntradaDigital <|-up- Pin
-SortidaDigital <|-- Pin
+
+EntradaAnalògica <|-- "public" Pin
+SortidaAnalògica <|-- "public" Pin
+EntradaDigital <|-up- "public" Pin
+SortidaDigital <|-- "public" Pin
 
 Joystick "2" *-- EntradaAnalògica
 Joystick "2" *-- Pos
