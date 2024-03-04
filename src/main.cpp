@@ -48,32 +48,31 @@ void setup() {
 }
 
 void loop() {
+    // Lectura dels receptors
     bool sensorsCanvi = dht.read();
 
-    bool prevJx = joystickXCanvi;
-    joystickXCanvi = joystick.read(X);
-
-    bool tempSetCanvi = prevJx != joystickXCanvi;
+    joystick.read(X);
 
     botoAlarma.read();
     obstacles.read();
 
-    if (joystickXCanvi || *joystick.getPos(X) != 0) {
+    if (*joystick.getPos(X) != 0) {
         int pos = *joystick.getPos(X);
-        if (abs(pos) > 20) {
-            TEMP += pos < 0 ? -1 : 1;
-        }
-        pantalla.update("Establint temp", String(TEMP));
 
+        if (abs(pos) > 30)  // Segon deadzone.
+            TEMP_SETTING += pos < 0 ? -1 : 1; // TODO Implementar acceleració de l'augment segons posició
 
-    } else if (sensorsCanvi || tempSetCanvi) {
+        if (abs(pos) > 30 || pantalla.isIdle)
+            pantalla.update("Establint temp", String(TEMP_SETTING));
+    } else if (sensorsCanvi || !pantalla.isIdle)
         pantalla.idle();
-    }
+
 
     if (!obstacles.value) ALARMA = true;
     else if (botoAlarma.value) ALARMA = false;
 
-    if ((millis()/1000)%2 == 0 && ALARMA) {
+    // El segon actual és parell i l'alarma està sonant?
+    if ((millis() / 1000) % 2 == 0 && ALARMA) {
         leds.list[3] = CRGB::Red;
         leds.list[4] = CRGB::Red;
     } else {
