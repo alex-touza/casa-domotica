@@ -4,16 +4,15 @@
 
 #include "Joystick.h"
 
-Joystick::Joystick(int _pinX, int _pinY, int _deadzone = 10) : deadzone(_deadzone
-), pos({0, 0}) {
+Joystick::Joystick(int _pinX, int _pinY, int _deadzone = 10) : deadzone(_deadzone), pos({0, 0}),
+                                                               lastChanged({0, 0}) {
     this->pinX = new EntradaAnalogica(_pinX);
     this->pinY = new EntradaAnalogica(_pinY);
 }
 
 bool Joystick::read() {
-    // Operador OR que no curtcircuita perquè s'evaluïn els dos
-    // operands.
-    // Clever code > readability
+    // Operador OR que no curtcircuita perquè s'evaluïn els dos operands.
+    // Clever code > readability :)
     return read(X) | read(Y);
 }
 
@@ -23,20 +22,21 @@ bool Joystick::read(Axis axis) {
 
     // [=] fa que es puguin accedir a les mateixes variables (com 'this')
     // que des de fora de la lambda.
-    // Aplicar la deadzone
+    // Aplicar la deadzone.
     auto round = [=](int _pos) -> int { return abs(_pos) > this->deadzone ? _pos : 0; };
 
     int prev = *posAxis;
 
-    *posAxis = round(::map((int)pin->read(), 0, 4095, -100, 100));
+    *posAxis = round(::map((int) pin->read(), 0, 4095, -100, 100));
 
 
-     if (*posAxis == prev) {
-         return millis() - (axis == X ? this->lastChanged.x : this->lastChanged.y) > 500;
-     } else {
-         (axis == X ? this->lastChanged.x : this->lastChanged.y) = millis();
-         return true;
-     }
+    if (*posAxis == prev) {
+        // Si no ha canviat, esperar 500 ms per retornar false.
+        return millis() - (axis == X ? this->lastChanged.x : this->lastChanged.y) < 500 && millis() > 500;
+    } else {
+        (axis == X ? this->lastChanged.x : this->lastChanged.y) = millis();
+        return true;
+    }
 }
 
 void Joystick::begin() {
