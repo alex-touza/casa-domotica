@@ -1,6 +1,6 @@
 from shutil import copytree
 from glob import glob
-from os import rename, chdir, system
+from os import chdir, system
 from pathlib import Path
 from os.path import abspath, join, isdir
 from shutil import rmtree
