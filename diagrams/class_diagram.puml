@@ -1,5 +1,5 @@
 @startuml
-skinparam dpi 500
+skinparam dpi 1250
 skinparam linetype ortho
 'https://plantuml.com/class-diagram
 
