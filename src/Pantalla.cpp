@@ -1,8 +1,9 @@
 #include "Pantalla.h"
 #include <Arduino.h>
 
-Pantalla::Pantalla(TempHum* _tempHum, int* _tempSetting)
-        : LiquidCrystal_I2C(0x27, 16, 2), t(0), maxT(0), tempHum(_tempHum), tempSetting(_tempSetting) {}
+Pantalla::Pantalla(Temperatura* _temp, Humitat* _hum, int* _tempSetting)
+        : LiquidCrystal_I2C(0x27, 16, 2), t(0), maxT(0), temp(_temp), isIdle(true),
+          hum(_hum), tempSetting(_tempSetting) {}
 
 void Pantalla::begin() {
     this->init();
@@ -11,6 +12,7 @@ void Pantalla::begin() {
 }
 
 void Pantalla::update(const String& upperLine, const String& lowerLine) {
+    this->isIdle = false;
     this->clear();
     this->setCursor(0, 0);
     this->print(upperLine);
@@ -26,8 +28,9 @@ void Pantalla::update(const String& upperLine, const String& lowerLine, unsigned
 }
 
 void Pantalla::idle() {
-    this->update("T " + String((int) this->tempHum->temp) + " C (" + String(*this->tempSetting) + " C)",
-                 "H " + String((int) this->tempHum->hum) + " %");
+    this->isIdle = true;
+    this->update("T " + String((int) this->temp->value) + " C (" + String(*this->tempSetting) + " C)",
+                 "H " + String((int) this->hum->value) + " %");
 }
 
 void Pantalla::checkTime() {

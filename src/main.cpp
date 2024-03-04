@@ -2,10 +2,17 @@
 #include "NeoPixel.h"
 #include "Pantalla.h"
 #include "EntradaDigital.h"
-#include "TempHum.h"
 #include "Joystick.h"
+#include "Sensor.h"
+#include "Temperatura.h"
+#include "Humitat.h"
 
-int TEMP = 24;
+/*
+https://github.com/FastLED/FastLED/issues/1169
+#define FASTLED_ALL_PINS_HARDWARE_SPI
+ */
+
+int TEMP_SETTING = 24;
 bool ALARMA = false;
 
 CDPins::EntradaDigital obstacles(5);
@@ -13,10 +20,13 @@ CDPins::EntradaDigital botoAlarma(23);
 Joystick joystick(34, 35, 10);
 
 NeoPixel leds;
-TempHum dht(14, &leds.list[0], &leds.list[1]);
-Pantalla pantalla(&dht, &TEMP);
 
-bool joystickXCanvi = false;
+DHT dht = Sensor::initDHT(14);
+Temperatura temperatura(&dht, &leds.list[0]);
+Humitat humitat(&dht, &leds.list[1]);
+
+//TempHum dht(14, &leds.list[0], &leds.list[1]);
+Pantalla pantalla(&temperatura, &humitat, &TEMP_SETTING);
 
 void setup() {
     obstacles.begin();
@@ -26,6 +36,9 @@ void setup() {
     leds.begin();
 
     dht.begin();
+    temperatura.begin();
+    humitat.begin();
+
     pantalla.begin();
 
     Serial.begin(9600);

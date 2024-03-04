@@ -72,7 +72,12 @@ together {
 		hide FastLED members
 
 		class CRGB <<extern>> {}
-		hide FastLED members
+		hide CRGB members
+
+		enum HTMLColorCode <<extern>> {}
+		hide HTMLColorCode members
+
+		CRGB +-- HTMLColorCode
 	}
 
 
@@ -89,7 +94,7 @@ package DHT <<rectangle>> #EEE {
 }
 
 class Range {
-	- int size;
+	- int size
 	- bool cycle
 	- const int* range
 	+ Range(const int _range[], int _size, bool _cycle)
@@ -104,7 +109,8 @@ package LiquidCrystal_I2C <<rectangle>> #EEE {
 class Pantalla {
 	- unsigned long t
 	- unsigned long maxT
-	- TempHum* tempHum
+	- Temperatura* temp
+	- Humitat* hum
 	- int* tempSetting
 	+ Pantalla(TempHum* _tempHum, int* _tempSetting)
 	+ void begin()
@@ -114,20 +120,33 @@ class Pantalla {
     + void checkTime()
 }
 
-class TempHum {
-	- CRGB* ledTemp
-	- CRGB* ledHum
-	- {static} const int tempRange
-	- {static} const int humRange
-	- CRGB colors[]
-	- Range* tempRange
-	- Range* humRange
-	# int pin
-	+ TempHum(int _pin, CRGB* _ledTemp, CRGB* _ledHum)
+class Sensor {
+	- CRGB* led
+	- Range range
+	# bool process(double _value, CRGB::HTMLColorCode colors[])
+	+ Sensor(CRGB* _led, Range _range)
+	+ {abstract} void begin()
+	+ {abstract} void read()
+	+ double value
+	+ {static} DHT initDHT(unsigned char)
+}
+
+class Humitat {
+	- {static} const int rangesList[]
+	- {static} CRGB::HTMLColorCode colors[]
+	- DHT* dht
+	+ Humitat(DHT* _dht, CRGB* _led)
 	+ void begin()
-	+ bool read()
-	+ double temp
-	+ double hum
+	+ void read()
+}
+
+class Temperatura {
+	- {static} const int rangesList[]
+	- {static} CRGB::HTMLColorCode colors[]
+	- DHT* dht
+	+ Temperatura(DHT* _dht, CRGB* _led)
+	+ void begin()
+	+ void read()
 }
 note right of TempHum
 S'hauria de dividir per a cada mesura
@@ -144,16 +163,27 @@ Joystick --- Axis
 NeoPixel *-- FastLED::CRGB
 NeoPixel --- FastLED::FastLED
 
-Pantalla <|-- LiquidCrystal_I2C
-Pantalla *-- TempHum
+Pantalla <|-- "private" LiquidCrystal_I2C
+Pantalla *-- Temperatura
+Pantalla *-- Humitat
 
-TempHum <|-- DHT
-TempHum *-- Range
-TempHum *-- CRGB
+Sensor *-- Range
+Sensor --- DHT
+
+Temperatura <|-- "public" Sensor
+Humitat <|-- "public" Sensor
+
+Temperatura *-- DHT
+Temperatura *-- CRGB
+Humitat *-- DHT
+Humitat *-- CRGB
+
 
 'hide NeoPixel members
 'hide Pantalla members
-'hide TempHum members
+'hide Temperatura members
+'hide Humitat members
+'hide Sensor members
 'hide Range members
 'hide Joystick members
 'hide EntradaDigital members

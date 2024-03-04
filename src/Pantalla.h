@@ -6,17 +6,19 @@
 #define CASA_DOMOTICA_PANTALLA_H
 #include <Arduino.h>
 #include <LiquidCrystal_I2C.h>
-#include "TempHum.h"
+#include "Temperatura.h"
+#include "Humitat.h"
 
 class Pantalla : LiquidCrystal_I2C {
 private:
     unsigned long t;
     unsigned long maxT;
-    TempHum* tempHum;
+    Temperatura* temp;
+    Humitat* hum;
     int* tempSetting;
 
 public:
-    explicit Pantalla(TempHum* _tempHum, int* _tempSetting);
+    explicit Pantalla(Temperatura* _temp, Humitat* _hum,  int* _tempSetting);
     void begin();
 
     void update(const String& upperLine, const String& lowerLine);
@@ -25,6 +27,8 @@ public:
     void idle();
 
     void checkTime();
+
+    bool isIdle{};
 };
 
 
