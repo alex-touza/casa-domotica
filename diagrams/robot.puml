@@ -1,7 +1,7 @@
 @startuml
 skinparam dpi 500
 start
-group #FFF Inicialització
+group Inicialització
 	:Llegir **codi** de desactivació; <<input>>
 	repeat
 	:Llegir **velocitat** en m/s; <<input>>
@@ -12,16 +12,16 @@ endgroup
 
 repeat
 
-group #FFF Detecció de la nit
+group Detecció de la nit
 	:Llegir **llum** del sensor de llum; <<load>>
-if (És de nit? (**llum**)) is (sí) then
-	:Apagar **llum groc**;
-	stop
-else (no)
-endif
+	if (És de nit? (**llum**)) is (sí) then
+		:Apagar **llum groc**;
+		stop
+	else (no)
+	endif
 endgroup
 
-group #FFF Moviment del robot
+group Moviment del robot
 	:Llegir **distància** del sensor d'infrarojos; <<load>>
 	if (**velocitat** > **distància**) is (Sí) then
 	  :Gira 90º CW;
@@ -32,7 +32,7 @@ group #FFF Moviment del robot
 	endif
 endgroup
 
-group #FFF Detecció de moviment
+group Detecció de moviment
 	:Llegir **moviment** del sensor de moviment; <<load>>
 	if (**moviment**?) is (No) then
 		if (**llum groc** encès?) is (Sí) then
@@ -41,7 +41,7 @@ group #FFF Detecció de moviment
 		  :Encendre **llum groc**;
 		endif
 	else (Sí)
-		group #FFF Alerta
+		group Alerta
 			:Fer sonar **sirena**;
 			:Apagar **llum groc**;
 			:Encendre **llum vermell**;
