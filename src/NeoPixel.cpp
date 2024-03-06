@@ -5,7 +5,7 @@
 #include "NeoPixel.h"
 
 void NeoPixel::begin() {
-    FastLED.addLeds<WS2812B, NEOPIXEL_PIN, GRB>(this->list, NEOPIXEL_N_LEDS);
+    FastLED.addLeds<WS2812B, NEOPIXEL_PIN, GRB>(NeoPixel::list, NEOPIXEL_N_LEDS);
     FastLED.setBrightness(80);
 }
 

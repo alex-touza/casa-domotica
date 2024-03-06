@@ -19,21 +19,19 @@ CDPins::EntradaDigital obstacles(5);
 CDPins::EntradaDigital botoAlarma(23);
 Joystick joystick(34, 35, 10);
 
-NeoPixel leds;
-
 DHT dht = Sensor::initDHT(14);
-Temperatura temperatura(&dht, &leds.list[0]);
-Humitat humitat(&dht, &leds.list[1]);
+Temperatura temperatura(&dht, &NeoPixel::list[0], &NeoPixel::list[2], &TEMP_SETTING);
+Humitat humitat(&dht, &NeoPixel::list[1]);
 
 //TempHum dht(14, &leds.list[0], &leds.list[1]);
-Pantalla pantalla(&temperatura, &humitat, &TEMP_SETTING);
+Pantalla pantalla(&temperatura, &humitat);
 
 void setup() {
     obstacles.begin();
     botoAlarma.begin();
     joystick.begin();
 
-    leds.begin();
+    NeoPixel::begin();
 
     dht.begin();
     temperatura.begin();
@@ -49,7 +47,7 @@ void setup() {
 
 void loop() {
     // Lectura dels receptors
-    bool sensorsCanvi = dht.read();
+    bool sensorsCanvi = temperatura.read() | humitat.read(); // clever code >>>> readability
 
     joystick.read(X);
 
@@ -73,12 +71,13 @@ void loop() {
 
     // El segon actual és parell i l'alarma està sonant?
     if ((millis() / 1000) % 2 == 0 && ALARMA) {
-        leds.list[3] = CRGB::Red;
-        leds.list[4] = CRGB::Red;
+        NeoPixel::list[3] = CRGB::Red;
+        NeoPixel::list[4] = CRGB::Red;
     } else {
-        leds.list[3] = CRGB::Black;
-        leds.list[4] = CRGB::Black;
+        NeoPixel::list[3] = CRGB::Black;
+        NeoPixel::list[4] = CRGB::Black;
     }
 
-    leds.refresh();
+    NeoPixel::refresh();
+    delay(200);
 }

@@ -9,8 +9,7 @@
 #define NEOPIXEL_PIN 25
 #define NEOPIXEL_N_LEDS 8
 
-class NeoPixel {
-public:
+namespace NeoPixel {
     void begin();
 
     CRGB list[NEOPIXEL_N_LEDS];
