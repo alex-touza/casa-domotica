@@ -144,7 +144,8 @@ class Temperatura {
 	- {static} const int rangesList[]
 	- {static} CRGB::HTMLColorCode colors[]
 	- DHT* dht
-	+ Temperatura(DHT* _dht, CRGB* _led)
+	- CRB* ledSetting
+	+ Temperatura(DHT* _dht, CRGB* _ledTemp, CRGB* _ledSetting)
 	+ void begin()
 	+ void read()
 }
