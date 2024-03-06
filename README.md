@@ -45,6 +45,9 @@ El codi font d'aquestes llibreries es troba a la carpeta [`~/lib`](./lib).
    paquet `colorama` instal·lat. Alternativament, també podeu descarregar una distribució del projecte des de Releases.
 3. Obriu la carpeta `~/dist/casa-domotica` a Arduino IDE i compileu.
 
+## TODO
+- Utilitzar llibreries d'Arduinoblocks per assegurar la compatibilitat amb ESP32 Steamakers
+- 
 ## Autors
 
 - Gisele Jaccottet
