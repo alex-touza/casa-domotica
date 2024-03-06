@@ -7,13 +7,6 @@
 
 #include "Arduino.h"
 
-/*
- * Rang amb múltiples estats i modes.
- *
- * Usat per als rangs de temperatura, on hi ha tres
- * estats (correcte, millorable, inadequat) i dos
- * modes (estiu, hivern).
- */
 class Range {
 private:
     int size;

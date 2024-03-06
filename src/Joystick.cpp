@@ -46,7 +46,6 @@ void Joystick::begin() {
 
 // Aquest és el mètode privat, usat per accedir fàcilment
 // a un valor.
-
 // TODO Utilitzar template perquè es pugui utilitzar també per a lastChanged
 int* Joystick::getPosPtr(Axis axis) {
     return axis == X ? &this->pos.x : &this->pos.y;
