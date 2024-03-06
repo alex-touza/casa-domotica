@@ -4,18 +4,27 @@
 
 #include "Temperatura.h"
 
-Temperatura::Temperatura(DHT* _dht, CRGB* _led) :
-        dht(_dht),
-        Sensor(_led, {Temperatura::rangesList, 2, false}) {}
+Temperatura::Temperatura(DHT* _dht, CRGB* _ledTemp, CRGB* _ledSetting, int* _tempSetting) :
+        dht(_dht), ledSetting(_ledSetting), tempSetting(_tempSetting),
+        Sensor(_ledTemp, {Temperatura::tempRangesList, 2, true}) {}
 
 void Temperatura::begin() {
     this->read();
 }
 
 bool Temperatura::read() {
-    return this->process(this->dht->readTemperature(), Temperatura::colors);
+    this->value = this->dht->readTemperature();
+
+    int settingRangesList[] = {*this->tempSetting - 1, *this->tempSetting + 1};
+
+    *ledSetting = Temperatura::tempColors[
+            Range(settingRangesList, 2, false).getLevel(round(this->value))
+    ];
+
+    return this->process(this->value, Temperatura::tempColors);
 }
 
-const int Temperatura::rangesList[2] = {20, 24};
+const int Temperatura::tempRangesList[2] = {20, 24};
 
-CRGB::HTMLColorCode Temperatura::colors[3] = {CRGB::Blue, CRGB::Green, CRGB::Red};
+CRGB::HTMLColorCode Temperatura::tempColors[3] = {CRGB::Green, CRGB::Red};
+CRGB::HTMLColorCode Temperatura::settingColors[3] = {CRGB::Blue, CRGB::Green, CRGB::Red};

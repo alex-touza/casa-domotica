@@ -1,9 +1,14 @@
 #include "Pantalla.h"
+#include "Temperatura.h"
 #include <Arduino.h>
 
-Pantalla::Pantalla(Temperatura* _temp, Humitat* _hum, int* _tempSetting)
+bool Lines::operator==(const Lines& a) const {
+    return (this->upperLine == a.upperLine && this->lowerLine == a.lowerLine);
+}
+
+Pantalla::Pantalla(Temperatura* _temp, Humitat* _hum)
         : LiquidCrystal_I2C(0x27, 16, 2), t(0), maxT(0), temp(_temp), isIdle(true),
-          hum(_hum), tempSetting(_tempSetting) {}
+          lines({"", ""}), hum(_hum) {}
 
 void Pantalla::begin() {
     this->init();
@@ -11,13 +16,25 @@ void Pantalla::begin() {
     this->idle();
 }
 
-void Pantalla::update(const String& upperLine, const String& lowerLine) {
-    this->isIdle = false;
+bool Pantalla::update(const String& upperLine, const String& lowerLine, bool forceRefresh, bool forceIdle) {
+    if (this->lines == Lines{upperLine, lowerLine} && !forceRefresh) return false;
+
+    this->isIdle = forceIdle;
+
+
+    this->lines.lowerLine = lowerLine;
+    this->lines.upperLine = upperLine;
+
     this->clear();
     this->setCursor(0, 0);
     this->print(upperLine);
     this->setCursor(0, 1);
     this->print(lowerLine);
+    return true;
+}
+
+bool Pantalla::update(const Lines& _lines, bool forceRefresh, bool forceIdle) {
+    return this->update(_lines.upperLine, _lines.lowerLine, forceRefresh, forceIdle);
 }
 
 void Pantalla::update(const String& upperLine, const String& lowerLine, unsigned long _t) {
@@ -27,10 +44,12 @@ void Pantalla::update(const String& upperLine, const String& lowerLine, unsigned
     this->update(upperLine, lowerLine);
 }
 
-void Pantalla::idle() {
-    this->isIdle = true;
-    this->update("T " + String((int) this->temp->value) + " C (" + String(*this->tempSetting) + " C)",
-                 "H " + String((int) this->hum->value) + " %");
+Lines Pantalla::idle() {
+    Lines idleLines = {"T " + String(this->temp->value, 1) + " C (" + String(*this->temp->tempSetting) + " C)",
+                       "H " + String(this->hum->value, 1) + " %"};
+
+    this->update(idleLines, false, true);
+    return idleLines;
 }
 
 void Pantalla::checkTime() {

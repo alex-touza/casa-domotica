@@ -13,7 +13,7 @@ void Humitat::begin() {
 }
 
 bool Humitat::read() {
-    return this->process(this->dht->readHumidity(), Humitat::colors);
+    return this->process(this->value = this->dht->readHumidity(), Humitat::colors);
 }
 
 const int Humitat::rangesList[4] = {35, 45, 55, 65};
