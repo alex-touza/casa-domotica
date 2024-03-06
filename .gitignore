@@ -1,3 +1,4 @@
 .pio
 dist
 .zip
+build_script/__pycache__
