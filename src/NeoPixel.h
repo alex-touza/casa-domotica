@@ -6,7 +6,7 @@
 #define CASA_DOMOTICA_NEOPIXEL_H
 #include <FastLED.h>
 
-#define NEOPIXEL_PIN 25
+#define NEOPIXEL_PIN 27
 #define NEOPIXEL_N_LEDS 8
 
 namespace NeoPixel {
@@ -15,7 +15,7 @@ namespace NeoPixel {
     CRGB list[NEOPIXEL_N_LEDS];
 
     void refresh();
-};
+}
 
 
 #endif //CASA_DOMOTICA_NEOPIXEL_H

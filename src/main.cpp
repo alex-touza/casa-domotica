@@ -15,11 +15,11 @@ https://github.com/FastLED/FastLED/issues/1169
 int TEMP_SETTING = 24;
 bool ALARMA = false;
 
-CDPins::EntradaDigital obstacles(5);
-CDPins::EntradaDigital botoAlarma(23);
+CDPins::EntradaDigital obstacles(16);
+CDPins::EntradaDigital botoAlarma(25);
 Joystick joystick(34, 35, 10);
 
-DHT dht = Sensor::initDHT(14);
+DHT dht = Sensor::initDHT(17);
 Temperatura temperatura(&dht, &NeoPixel::list[0], &NeoPixel::list[2], &TEMP_SETTING);
 Humitat humitat(&dht, &NeoPixel::list[1]);
 
@@ -53,15 +53,18 @@ void loop() {
 
     botoAlarma.read();
     obstacles.read();
+    Serial.println("Botó alarma? " + String(botoAlarma.value));
+    Serial.println("Obstacle? " + String(obstacles.value));
 
     if (*joystick.getPos(X) != 0) {
         int pos = *joystick.getPos(X);
 
-        if (abs(pos) > 30)  // Segon deadzone.
-            TEMP_SETTING += pos < 0 ? -1 : 1; // TODO Implementar acceleració de l'augment segons posició
+        if ((abs(pos) > 30 && (millis() / 500 % 2)) || pantalla.isIdle) {  // Segon deadzone.
+            if (!pantalla.isIdle)
+                TEMP_SETTING += pos < 0 ? -1 : 1; // TODO Implementar acceleració de l'augment segons posició
 
-        if (abs(pos) > 30 || pantalla.isIdle)
             pantalla.update("Establint temp", String(TEMP_SETTING));
+        }
     } else if (sensorsCanvi || !pantalla.isIdle)
         pantalla.idle();
 
@@ -69,8 +72,8 @@ void loop() {
     if (!obstacles.value) ALARMA = true;
     else if (botoAlarma.value) ALARMA = false;
 
-    // El segon actual és parell i l'alarma està sonant?
-    if ((millis() / 1000) % 2 == 0 && ALARMA) {
+    // El segon actual és senar i l'alarma està sonant?
+    if ((millis() / 1000) % 2 && ALARMA) {
         NeoPixel::list[3] = CRGB::Red;
         NeoPixel::list[4] = CRGB::Red;
     } else {
