@@ -17,14 +17,14 @@ bool Temperatura::read() {
 
     int settingRangesList[] = {*this->tempSetting - 1, *this->tempSetting + 1};
 
-    *ledSetting = Temperatura::tempColors[
-            Range(settingRangesList, 2, false).getLevel(round(this->value))
-    ];
+    int level = Range(settingRangesList, 2, false).getLevel(round(this->value));
+
+    *ledSetting = Temperatura::settingColors[level];
 
     return this->process(this->value, Temperatura::tempColors);
 }
 
 const int Temperatura::tempRangesList[2] = {20, 24};
+CRGB::HTMLColorCode Temperatura::tempColors[2] = {CRGB::Red, CRGB::Green};
 
-CRGB::HTMLColorCode Temperatura::tempColors[3] = {CRGB::Green, CRGB::Red};
 CRGB::HTMLColorCode Temperatura::settingColors[3] = {CRGB::Blue, CRGB::Green, CRGB::Red};
