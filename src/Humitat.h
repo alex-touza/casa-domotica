@@ -14,7 +14,7 @@ private:
 
     DHT* dht;
 public:
-    explicit Humitat(DHT* _dht, CRGB* _led);
+    Humitat(DHT* _dht, CRGB* _led);
 
     void begin() override;
     bool read() override;
