@@ -11,9 +11,9 @@ namespace CDPins {
 
         void begin() override;
 
-        void set(int valor);
+        void set(int _value);
 
-        void set(int valor, int min, int max);
+        void set(int _value, int min, int max);
     };
 }
 

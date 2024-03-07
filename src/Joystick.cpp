@@ -31,8 +31,8 @@ bool Joystick::read(Axis axis) {
 
 
     if (*posAxis == prev) {
-        // Si no ha canviat, esperar 500 ms per retornar false.
-        return millis() - (axis == X ? this->lastChanged.x : this->lastChanged.y) < 500 && millis() > 500;
+        // Si no ha canviat, esperar 1000 ms per retornar false.
+        return millis() - (axis == X ? this->lastChanged.x : this->lastChanged.y) < 1000 && millis() > 1000;
     } else {
         (axis == X ? this->lastChanged.x : this->lastChanged.y) = millis();
         return true;

@@ -14,7 +14,7 @@ private:
     CRGB* led;
 
     // No és un punter perquè pugui ser passat directament
-    // com a paràmetre enlloc de ser creat amb una variable
+    // com a paràmetre en lloc de ser creat amb una variable
     // temporal.
     Range range;
 
@@ -24,7 +24,7 @@ protected:
     bool process(double _value, CRGB::HTMLColorCode colors[]);
 
 public:
-    explicit Sensor(CRGB* _led, Range _range);
+    Sensor(CRGB* _led, Range _range);
     virtual void begin() = 0;
     virtual bool read() = 0;
 

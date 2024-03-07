@@ -26,7 +26,7 @@ private:
     // Permetre a pantalla l'accés a membres privats.
     friend Pantalla;
 public:
-    explicit Temperatura(DHT* _dht, CRGB* _ledTemp, CRGB* _ledSetting, int* _tempSetting);
+    Temperatura(DHT* _dht, CRGB* _ledTemp, CRGB* _ledSetting, int* _tempSetting);
 
     void begin() override;
     bool read() override;
