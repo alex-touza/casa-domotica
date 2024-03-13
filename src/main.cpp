@@ -6,16 +6,16 @@
 #include "Sensor.h"
 #include "Temperatura.h"
 #include "Humitat.h"
+#include "Motor.h"
+#include "Alarma.h"
 
 /*
 https://github.com/FastLED/FastLED/issues/1169
 #define FASTLED_ALL_PINS_HARDWARE_SPI
  */
 
-bool ALARMA = false;
 
-CDPins::EntradaDigital obstacles(16);
-CDPins::EntradaDigital botoAlarma(25);
+Alarma alarma(25, 16, alarmaLeds, 2);
 Joystick joystick(34, 35, 10);
 
 Motor ventilador(11, 12, 10);
@@ -28,8 +28,7 @@ Humitat humitat(&dht, &NeoPixel::list[1]);
 Pantalla pantalla(&temperatura, &humitat);
 
 void setup() {
-    obstacles.begin();
-    botoAlarma.begin();
+    alarma.begin(1000, 2);
     joystick.begin();
 
     NeoPixel::begin();
@@ -54,10 +53,7 @@ void loop() {
 
     joystick.read(X);
 
-    botoAlarma.read();
-    obstacles.read();
-    Serial.println("Botó alarma? " + String(botoAlarma.value));
-    Serial.println("Obstacle? " + String(obstacles.value));
+    alarma.read();
 
     if (*joystick.getPos(X) != 0) {
         int pos = *joystick.getPos(X);
@@ -72,18 +68,6 @@ void loop() {
         pantalla.idle();
 
 
-    if (!obstacles.value) ALARMA = true;
-    else if (botoAlarma.value) ALARMA = false;
-
-    // El segon actual és senar i l'alarma està sonant?
-    if ((millis() / 1000) % 2 && ALARMA) {
-        NeoPixel::list[3] = CRGB::Red;
-        NeoPixel::list[4] = CRGB::Red;
-    } else {
-        NeoPixel::list[3] = CRGB::Black;
-        NeoPixel::list[4] = CRGB::Black;
-    }
-
     NeoPixel::refresh();
-    delay(200);
+    delay(100);
 }
