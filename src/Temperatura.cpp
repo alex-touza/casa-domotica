@@ -4,8 +4,8 @@
 
 #include "Temperatura.h"
 
-Temperatura::Temperatura(DHT* _dht, CRGB* _ledTemp, CRGB* _ledSetting, int* _tempSetting) :
-        dht(_dht), ledSetting(_ledSetting), tempSetting(_tempSetting),
+Temperatura::Temperatura(int initSetting, DHT* _dht, CRGB* _ledTemp, CRGB* _ledSetting, Motor* _fan) :
+        dht(_dht), ledSetting(_ledSetting), setting(initSetting), fan(_fan),
         Sensor(_ledTemp, {Temperatura::tempRangesList, 2, true}) {}
 
 void Temperatura::begin() {
@@ -15,11 +15,23 @@ void Temperatura::begin() {
 bool Temperatura::read() {
     this->value = this->dht->readTemperature();
 
-    int settingRangesList[] = {*this->tempSetting - 1, *this->tempSetting + 1};
+    int settingRangesList[] = {this->setting - 1, this->setting + 1};
 
-    int level = Range(settingRangesList, 2, false).getLevel(round(this->value));
+    const Range& range = Range(settingRangesList, 2, false);
+
+    int level = range.getLevel(this->value);
+
+    Serial.println(level);
+    Serial.println(this->value);
+    Serial.println();
 
     *ledSetting = Temperatura::settingColors[level];
+
+    long dif = (long) (this->value - this->setting);
+
+    if (dif > 0) {
+        this->fan->setSpeed(map(dif, 0, 10, 400, 1023));
+    } else this->fan->off();
 
     return this->process(this->value, Temperatura::tempColors);
 }

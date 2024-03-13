@@ -23,16 +23,16 @@ public:
 
     void on();
     void off();
-    void setSpeed(int _speed);
+    void setSpeed(unsigned int _speed);
+    void setDirection(bool _direction);
+    void reverse();
 
-    // void reverse();
+    bool active;
 
-    const int* speed;
-    int prevSpeed;
+    const unsigned int* speed; // punter a en.value
+    unsigned int prevSpeed;
 
     bool direction; // true: A, false: B
-
-
 };
 
 

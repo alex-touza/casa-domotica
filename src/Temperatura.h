@@ -7,6 +7,7 @@
 
 #include "Sensor.h"
 #include "Pantalla.h"
+#include "Motor.h"
 
 // forward declaration per permetre friend Pantalla
 class Pantalla;
@@ -18,18 +19,18 @@ private:
     static CRGB::HTMLColorCode settingColors[];
 
     DHT* dht;
-
     CRGB* ledSetting;
-
-    int* tempSetting;
+    Motor* fan;
 
     // Permetre a pantalla l'accés a membres privats.
     friend Pantalla;
 public:
-    Temperatura(DHT* _dht, CRGB* _ledTemp, CRGB* _ledSetting, int* _tempSetting);
+    Temperatura(int initSetting, DHT* _dht, CRGB* _ledTemp, CRGB* _ledSetting, Motor* _fan);
 
     void begin() override;
     bool read() override;
+
+    int setting;
 
 
 };

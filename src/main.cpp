@@ -12,12 +12,13 @@ https://github.com/FastLED/FastLED/issues/1169
 #define FASTLED_ALL_PINS_HARDWARE_SPI
  */
 
-int TEMP_SETTING = 24;
 bool ALARMA = false;
 
 CDPins::EntradaDigital obstacles(16);
 CDPins::EntradaDigital botoAlarma(25);
 Joystick joystick(34, 35, 10);
+
+Motor ventilador(11, 12, 10);
 
 DHT dht = Sensor::initDHT(17);
 Temperatura temperatura(&dht, &NeoPixel::list[0], &NeoPixel::list[2], &TEMP_SETTING);
@@ -38,6 +39,8 @@ void setup() {
     humitat.begin();
 
     pantalla.begin();
+
+    ventilador.begin();
 
     Serial.begin(9600);
 
