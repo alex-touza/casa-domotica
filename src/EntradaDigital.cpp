@@ -6,7 +6,7 @@ void CDPins::EntradaDigital::begin() {
     pinMode(this->pin, INPUT);
 }
 
-int CDPins::EntradaDigital::read() {
+unsigned int CDPins::EntradaDigital::read() {
     return this->value = digitalRead(this->pin);
 }
 

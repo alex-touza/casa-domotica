@@ -17,7 +17,7 @@ namespace CDPins {
 
         void begin() override;
 
-        int read();
+        unsigned int read();
 
 
         /*

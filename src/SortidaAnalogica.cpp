@@ -5,8 +5,8 @@ void CDPins::SortidaAnalogica::begin() {
     pinMode(this->pin, OUTPUT);
 }
 
-void CDPins::SortidaAnalogica::set(int _value) {
-    analogWrite(this->pin, _value);
+void CDPins::SortidaAnalogica::set(unsigned int _value) {
+    analogWrite(this->pin, (int) _value);
     this->value = _value;
 }
 

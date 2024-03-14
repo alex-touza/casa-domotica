@@ -21,18 +21,18 @@ void CDPins::SortidaDigital::off(unsigned long t) {
     this->set(LOW, t);
 }
 
-void CDPins::SortidaDigital::set(int _value) {
+void CDPins::SortidaDigital::set(unsigned int _value) {
     digitalWrite(this->pin, _value);
     this->value = _value;
 }
 
-void CDPins::SortidaDigital::set(int _estat, unsigned long t) {
+void CDPins::SortidaDigital::set(unsigned int _estat, unsigned long t) {
     this->set(_estat);
     delay(t);
     this->set(!_estat);
 }
 
-int CDPins::SortidaDigital::toggle() {
+unsigned int CDPins::SortidaDigital::toggle() {
     this->set(!this->value);
     return this->value;
 }

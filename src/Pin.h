@@ -10,7 +10,7 @@ namespace CDPins {
         explicit Pin(int _pin);
         virtual void begin()=0; // virtual => obliga a ser redefinit en la classe filla
 
-        int value;
+        unsigned int value;
     };
 }
 
