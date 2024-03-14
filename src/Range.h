@@ -15,7 +15,7 @@ private:
 public:
     Range(const int _range[], int _size, bool _cycle = false);
 
-    int getLevel(int n);
+    int getLevel(double n) const;
 };
 
 

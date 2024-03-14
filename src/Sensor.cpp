@@ -15,7 +15,7 @@ bool Sensor::process(double _value, CRGB::HTMLColorCode colors[]) {
     // if (abs(this->value - prev) < 1e-9)
     //     return false;
 
-    int level = this->range.getLevel(round(this->value));
+    int level = this->range.getLevel(this->value);
 
     *this->led = colors[level];
 
