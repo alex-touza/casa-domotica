@@ -7,8 +7,9 @@ bool Lines::operator==(const Lines& a) const {
 }
 
 Pantalla::Pantalla(Temperatura* _temp, Humitat* _hum)
-        : LiquidCrystal_I2C(0x27, 16, 2), t(0), maxT(0), temp(_temp), isIdle(true),
-          lines({"", ""}), hum(_hum) {}
+        : LiquidCrystal_I2C(0x27, 16, 2), temp(_temp),
+          lines({"", ""}), screenId(0), hum(_hum) {}
+
 
 void Pantalla::begin() {
     this->init();
@@ -16,11 +17,10 @@ void Pantalla::begin() {
     this->idle();
 }
 
-bool Pantalla::update(const String& upperLine, const String& lowerLine, bool forceRefresh, bool forceIdle) {
+bool Pantalla::update(const String& upperLine, const String& lowerLine, int id, bool forceRefresh) {
     if (this->lines == Lines{upperLine, lowerLine} && !forceRefresh) return false;
 
-    this->isIdle = forceIdle;
-
+    this->screenId = id;
 
     this->lines.lowerLine = lowerLine;
     this->lines.upperLine = upperLine;
@@ -33,34 +33,18 @@ bool Pantalla::update(const String& upperLine, const String& lowerLine, bool for
     return true;
 }
 
-bool Pantalla::update(const Lines& _lines, bool forceRefresh, bool forceIdle) {
-    return this->update(_lines.upperLine, _lines.lowerLine, forceRefresh, forceIdle);
+bool Pantalla::update(const Lines& _lines, int id, bool forceRefresh) {
+    if (this->lines == _lines && !forceRefresh) return false;
+    return this->update(_lines.upperLine, _lines.lowerLine, id, forceRefresh);
 }
 
-void Pantalla::update(const String& upperLine, const String& lowerLine, unsigned long _t) {
-    //if (this->t != 0) return;
-    this->t = millis();
-    this->maxT = _t;
-    this->update(upperLine, lowerLine);
-}
-
-Lines Pantalla::idle() {
-    Lines idleLines = {"T " + String(this->temp->value, 1) + " C (" + String(*this->temp->tempSetting) + " C)",
+bool Pantalla::idle() {
+    Lines idleLines = {"T " + String(this->temp->value, 1) + " C (" + String(this->temp->setting) + " C)",
                        "H " + String(this->hum->value, 1) + " %"};
 
-    this->update(idleLines, false, true);
-    return idleLines;
+    return this->update(idleLines, 0, false);
 }
 
-void Pantalla::checkTime() {
-    // Hi ha un temporitzador i la diferència entre el moment
-    // actual i el començament és major que la durada?
-    if (this->t != 0 && millis() - this->t > this->maxT) {
-        // Reiniciar instants
-        this->t = 0;
-        this->maxT = 0;
-
-        // Tornar a missatge per defecte
-        this->idle();
-    }
+bool Pantalla::isIdle() const {
+    return this->screenId == 0;
 }

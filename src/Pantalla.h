@@ -26,11 +26,8 @@ struct Lines {
 
 class Pantalla : LiquidCrystal_I2C {
 private:
-    unsigned long t;
-    unsigned long maxT;
     Temperatura* temp;
     Humitat* hum;
-
 public:
     explicit Pantalla(Temperatura* _temp, Humitat* _hum);
 
@@ -41,19 +38,18 @@ public:
      *
      * Retorna true si la pantalla s'ha refrescat.
      */
-    bool update(const String& upperLine, const String& lowerLine, bool forceRefresh = false, bool forceIdle = false);
+    bool update(const String& upperLine, const String& lowerLine, int id = -1, bool forceRefresh = false);
 
-    bool update(const Lines& _lines, bool forceRefresh = false, bool forceIdle = false);
+    bool update(const Lines& _lines, int id = -1, bool forceRefresh = false);
 
-    void update(const String& upperLine, const String& lowerLine, unsigned long t);
+    bool idle();
 
-    Lines idle();
+    int screenId;
 
-    void checkTime();
-
-    bool isIdle;
+    bool isIdle() const;
 
     Lines lines;
+
 };
 
 
