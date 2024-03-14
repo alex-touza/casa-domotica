@@ -29,18 +29,18 @@ namespace CDPins {
         Assignar la sortida a un valor.
         Valors de tipus bool són convertits a int.
         */
-        void set(int estat);
+        void set(unsigned int estat);
 
         /*
         Assignar la sortida a un valor durant un temps determinat.
         Valors de tipus bool són convertits a int.
         */
-        void set(int estat, unsigned long t);
+        void set(unsigned int estat, unsigned long t);
         /*
         Encendre la sortida si està apagada, o apagar-la
         si està encesa. Retorna l'estat final.
         */
-        int toggle();
+        unsigned int toggle();
 
         /*
         Interval de 10 microsegons.

@@ -3,6 +3,13 @@
 
 #include <Arduino.h>
 #include "Pin.h"
+/*
+enum InterruptModes {
+    SIGNALRISING = RISING,
+    SIGNALFALLING = FALLING,
+};
+*/
+
 namespace CDPins {
     class EntradaDigital : public Pin {
     public:
@@ -18,6 +25,12 @@ namespace CDPins {
         interval de 10 microsegons.
         */
         unsigned long pulseIn();
+
+        /*
+        void attachInterrupt(InterruptModes mode, void (*callback)());
+
+        template<typename T>
+        void attachInterrupt(InterruptModes mode, void (*callback)(T), T* arg);*/
     };
 
 }
