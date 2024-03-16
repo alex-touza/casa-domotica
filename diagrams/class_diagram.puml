@@ -9,16 +9,16 @@ abstract class CDPins::Pin{
     # const int pin
     + Pin(int _pin)
     + {abstract} void begin()
-    + int value
+    + unsigned int value
 }
 
 class CDPins::EntradaDigital {
 	+ void begin()
-	+ int read()
-	+ unsigned int pulseIn()
+	+ unsigned int read()
+	+ unsigned long pulseIn()
 }
 
-class CDPins::EntradaAnalògica {
+class CDPins::EntradaAnalogica {
 	+ void begin()
 	+ unsigned int read()
 }
@@ -29,15 +29,15 @@ class CDPins::SortidaDigital {
 	+ void off()
 	+ void on(unsigned long t)
 	+ void off(unsigned long t)
-	+ void set(int estat)
-	+ void set(int estat, unsigned long t)
-	+ int toggle()
+	+ void set(unsigned int estat)
+	+ void set(unsigned int estat, unsigned long t)
+	+ unsigned int toggle()
 	+ void pulseOut()
 }
 
-class CDPins::SortidaAnalògica {
+class CDPins::SortidaAnalogica {
 	+ void begin()
-	+ void set(int valor)
+	+ void set(unsigned int valor)
 	+ void set(int valor, int min, int max)
 }
 
@@ -150,47 +150,46 @@ class Temperatura {
 	+ void read()
 }
 
-EntradaAnalògica <|-- "public" Pin
-SortidaAnalògica <|-- "public" Pin
+EntradaAnalogica <|-- "public" Pin
+SortidaAnalogica <|-- "public" Pin
 EntradaDigital <|-up- "public" Pin
 SortidaDigital <|-- "public" Pin
 
-Joystick "2" *-- EntradaAnalògica
+Joystick "2" *-- EntradaAnalogica
 Joystick "2" *-- Pos
 Joystick --- Axis
 
 NeoPixel *-- FastLED::CRGB
 NeoPixel --- FastLED::FastLED
 
-Pantalla <|-- "private" LiquidCrystal_I2C
+Pantalla <|-- "private" LiquidCrystal_I2C::LiquidCrystal_I2C
 Pantalla *-- Temperatura
 Pantalla *-- Humitat
 
 Sensor *-- Range
-Sensor --- DHT
+Sensor --- DHT::DHT
 
 Temperatura <|-- "public" Sensor
 Humitat <|-- "public" Sensor
 
-Temperatura *-- DHT
+Temperatura *-- DHT::DHT
 Temperatura *-- CRGB
-Humitat *-- DHT
+Humitat *-- DHT::DHT
 Humitat *-- CRGB
 
 
-'hide NeoPixel members
-'hide Pantalla members
-'hide Temperatura members
-'hide Humitat members
-'hide Sensor members
-'hide Range members
-'hide Joystick members
-'hide EntradaDigital members
-'hide SortidaDigital members
-'hide EntradaAnalògica members
-'hide SortidaAnalògica members
-'hide Pin members
-'hide Pos members
-'hide Axis members
-
+hide NeoPixel members
+hide Pantalla members
+hide Temperatura members
+hide Humitat members
+hide Sensor members
+hide Range members
+hide Joystick members
+hide EntradaDigital members
+hide SortidaDigital members
+hide EntradaAnalogica members
+hide SortidaAnalogica members
+hide Pin members
+hide Pos members
+hide Axis members
 @enduml

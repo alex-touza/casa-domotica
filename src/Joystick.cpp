@@ -5,10 +5,8 @@
 #include "Joystick.h"
 
 Joystick::Joystick(int _pinX, int _pinY, int _deadzone = 10) : deadzone(_deadzone), pos({0, 0}),
-                                                               lastChanged({0, 0}) {
-    this->pinX = new EntradaAnalogica(_pinX);
-    this->pinY = new EntradaAnalogica(_pinY);
-}
+                                                               lastChanged({0, 0}), pins({EntradaAnalogica{_pinX},
+                                                                                          EntradaAnalogica{_pinY}}) {}
 
 bool Joystick::read() {
     // Operador OR que no curtcircuita perquè s'evaluïn els dos operands.
@@ -18,7 +16,7 @@ bool Joystick::read() {
 
 bool Joystick::read(Axis axis) {
     int* posAxis = getPosPtr(axis);
-    EntradaAnalogica* pin = axis == X ? this->pinX : this->pinY;
+    EntradaAnalogica* pin = axis == X ? &this->pins.x : &this->pins.y;
 
     // [=] fa que es puguin accedir a les mateixes variables (com 'this')
     // que des de fora de la lambda.
@@ -40,8 +38,8 @@ bool Joystick::read(Axis axis) {
 }
 
 void Joystick::begin() {
-    this->pinX->begin();
-    this->pinY->begin();
+    this->pins.y.begin();
+    this->pins.x.begin();
 }
 
 // Aquest és el mètode privat, usat per accedir fàcilment

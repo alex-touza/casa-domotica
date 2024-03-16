@@ -19,7 +19,6 @@ namespace CDPins {
 
         unsigned int read();
 
-
         /*
         Equivalent a la funció integrada corresponent amb un
         interval de 10 microsegons.
@@ -30,7 +29,8 @@ namespace CDPins {
         void attachInterrupt(InterruptModes mode, void (*callback)());
 
         template<typename T>
-        void attachInterrupt(InterruptModes mode, void (*callback)(T), T* arg);*/
+        void attachInterrupt(InterruptModes mode, void (*callback)(T), T* arg);
+        */
     };
 
 }

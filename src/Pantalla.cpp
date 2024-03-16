@@ -44,7 +44,3 @@ bool Pantalla::idle() {
 
     return this->update(idleLines, 0, false);
 }
-
-bool Pantalla::isIdle() const {
-    return this->screenId == 0;
-}

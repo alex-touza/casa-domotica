@@ -6,7 +6,7 @@
 
 Alarma::Alarma(int buttonPin, int sensorPin, CRGB* _leds[], int _ledSize) : active(false), button(buttonPin),
                                                                             sensor(sensorPin), leds(_leds),
-                                                                            ledsSize(_ledSize) {}
+                                                                            ledsSize(_ledSize), interval(-1), mod(-1) {}
 
 void Alarma::begin(int _interval, int _mod) {
     this->interval = _interval;

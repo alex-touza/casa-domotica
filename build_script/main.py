@@ -27,7 +27,6 @@ sourceFiles = {"header": "h", "source": "cpp"}
 
 postprocessing = [
     FindReplace("/main.cpp", [("#include <Arduino.h>\n", "")]),
-    #FindReplace("/Pantalla.h", [("#include <LiquidCrystal_I2C.h>", "#include \"src/lib/LiquidCrystal_I2C/LiquidCrystal_I2C.h\"")]),
     Rename("/main.cpp", f"/{PROJECT_NAME}.ino")
 ]
 
