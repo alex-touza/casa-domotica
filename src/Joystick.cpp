@@ -5,8 +5,8 @@
 #include "Joystick.h"
 
 Joystick::Joystick(int _pinX, int _pinY, int _deadzone = 10) : deadzone(_deadzone), pos({0, 0}),
-                                                               lastChanged({0, 0}), pins({EntradaAnalogica{_pinX},
-                                                                                          EntradaAnalogica{_pinY}}) {}
+                                                               pins({EntradaAnalogica{_pinX},
+                                                               EntradaAnalogica{_pinY}}) {}
 
 bool Joystick::read() {
     // Operador OR que no curtcircuita perquè s'evaluïn els dos operands.
@@ -28,13 +28,7 @@ bool Joystick::read(Axis axis) {
     *posAxis = round(::map((int) pin->read(), 0, 4095, -100, 100));
 
 
-    if (*posAxis == prev) {
-        // Si no ha canviat, esperar 1000 ms per retornar false.
-        return millis() - (axis == X ? this->lastChanged.x : this->lastChanged.y) < 1000 && millis() > 1000;
-    } else {
-        (axis == X ? this->lastChanged.x : this->lastChanged.y) = millis();
-        return true;
-    }
+    return *posAxis == prev || *posAxis != 0;
 }
 
 void Joystick::begin() {

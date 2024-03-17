@@ -19,7 +19,6 @@ bool Sensor::process(double _value, CRGB::HTMLColorCode colors[]) {
 
     *this->led = colors[level];
 
-    Serial.print("Setting value from " + String(_value) + " to led level " + String(level));
     return true;
 }
 

@@ -7,9 +7,6 @@
 #include "Motor.h"
 #include "Alarma.h"
 
-#define NEOPIXEL_PIN 27
-#define NEOPIXEL_N_LEDS 8
-
 const Axis DIR_TEMP_SETTING = Y;
 
 enum Pantalles {
@@ -18,16 +15,7 @@ enum Pantalles {
     TEMPSET = 1,
 };
 
-CRGB leds[NEOPIXEL_N_LEDS];
-
-void NeoPixelBegin() {
-    FastLED.addLeds<WS2812B, NEOPIXEL_PIN, GRB>(leds, NEOPIXEL_N_LEDS); // NOLINT(*-static-accessed-through-instance)
-    FastLED.setBrightness(80);
-}
-
-void NeoPixelRefresh() {
-    FastLED.show();
-}
+CRGB leds[8];
 
 /*
 https://github.com/FastLED/FastLED/issues/1169
@@ -48,14 +36,16 @@ CRGB* alarmaLeds[]{leds + 3, leds + 4};
 
 Alarma alarma(25, 16, alarmaLeds, 2);
 Joystick joystick(34, 35, 10);
+Timer joystickCooldown(250);
 
-Motor ventilador(11, 12, 10);
+Motor ventilador(23, 19, 5);
 
 DHT dht = Sensor::initDHT(17);
 Temperatura temperatura(24, &dht, leds, leds + 2, &ventilador);
 Humitat humitat(&dht, leds + 1);
 
 Pantalla pantalla(&temperatura, &humitat);
+
 
 void setup() {
     alarma.begin(1000, 2);
@@ -66,8 +56,10 @@ void setup() {
     //obstacles.attachInterrupt<bool*>(SIGNALFALLING, ([](bool* _alarma) { *_alarma = true; }), &alarmaPtr);
 
     joystick.begin();
-
-    NeoPixelBegin();
+    joystickCooldown.active = false;
+    
+    FastLED.addLeds<WS2812B, 27, GRB>(leds, 8); // NOLINT(*-static-accessed-through-instance)
+    FastLED.setBrightness(80);
 
     dht.begin();
     temperatura.begin();
@@ -83,28 +75,34 @@ void setup() {
     while (!Serial);
 
     Serial.println("Hola");
+    ventilador.on();
+    delay(2000);
 }
 
 void loop() {
     // Lectura dels receptors
     bool sensorsCanvi = temperatura.read() | humitat.read(); // clever code >>>> readability
 
-    joystick.read(DIR_TEMP_SETTING);
+    bool joystickActiu = joystick.read(DIR_TEMP_SETTING);
 
     alarma.read();
 
     if (*joystick.getPos(DIR_TEMP_SETTING) != 0) {
         int pos = *joystick.getPos(DIR_TEMP_SETTING);
 
-        if ((abs(pos) > 20 && (millis() / 500 % 5)) || pantalla.screenId != Pantalles::TEMPSET) {
-            if (pantalla.screenId != Pantalles::IDLE)
-                temperatura.setting += (pos < 0 ? -1 : 1) * (1 + (abs(pos) > 60));
-
-            pantalla.update("Establint temp", String(temperatura.setting), Pantalles::TEMPSET);
+        if (joystickCooldown.hasFinished() && pantalla.screenId == Pantalles::TEMPSET) {
+            joystickCooldown.active = true;
+            joystickCooldown.reset();
+            temperatura.setting += (pos < 0 ? -1 : 1) * (1 + (abs(pos) > 75));
         }
-    } else if (sensorsCanvi || pantalla.screenId == Pantalles::IDLE)
-        pantalla.idle();
 
-    NeoPixelRefresh();
+        pantalla.update("Establint temp", String(temperatura.setting) + " C", Pantalles::TEMPSET);
+        
+    } else if (sensorsCanvi || pantalla.screenId == Pantalles::IDLE) {
+        joystickCooldown.active = false;
+        pantalla.idle();
+    }
+
+    FastLED.show();
     delay(100);
 }

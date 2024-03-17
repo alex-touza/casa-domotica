@@ -18,7 +18,7 @@ void Alarma::begin(int _interval, int _mod) {
 
 bool Alarma::read() {
     if (!this->sensor.read()) this->active = true; // NOLINT(*-branch-clone)
-    else if (!this->button.read()) this->active = true;
+    else if (!this->button.read()) this->active = false;
 
     CRGB::HTMLColorCode ledsColor = Alarma::colors[(millis() / this->interval) % this->mod && this->active];
 

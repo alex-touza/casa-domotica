@@ -25,7 +25,7 @@ struct Lines {
     bool operator==(const Lines& a) const;
 };
 
-class Pantalla : LiquidCrystal_I2C {
+class Pantalla : private LiquidCrystal_I2C {
 private:
     Temperatura* temp;
     Humitat* hum;
