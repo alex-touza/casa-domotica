@@ -90,7 +90,7 @@ void loop() {
     if (*joystick.getPos(DIR_TEMP_SETTING) != 0) {
         int pos = *joystick.getPos(DIR_TEMP_SETTING);
 
-        if (joystickCooldown.hasFinished() && pantalla.screenId == Pantalles::TEMPSET) {
+        if (joystickCooldown.hasFinished() && pantalla.screenId == Pantalles::TEMPSET && abs(pos) > 25) {
             joystickCooldown.active = true;
             joystickCooldown.reset();
             temperatura.setting += (pos < 0 ? -1 : 1) * (1 + (abs(pos) > 75));
