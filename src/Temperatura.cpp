@@ -27,7 +27,7 @@ bool Temperatura::read() {
 
     *ledSetting = Temperatura::settingColors[level];
 
-    long dif = (long) (this->value - this->setting);
+    int dif = (round(this->value) - this->setting);
 
     if (dif < 0) {
         this->fan->setSpeed(map(constrain(-dif, 0, 10), 0, 10, 400, 1023));
