@@ -30,7 +30,7 @@ bool Temperatura::read() {
     int dif = (round(this->value) - this->setting);
 
     if (dif < 0) {
-        this->fan->setSpeed(map(constrain(-dif, 0, 10), 0, 10, 400, 1023));
+        this->fan->setSpeed(map(constrain(-dif, 0, 10), 0, 10, 100, 255));
     } else this->fan->off();
 
     return this->process(this->value, Temperatura::tempColors);
