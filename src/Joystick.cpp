@@ -28,7 +28,7 @@ bool Joystick::read(Axis axis) {
     *posAxis = round(::map((int) pin->read(), 0, 4095, -100, 100));
 
 
-    return *posAxis == prev || *posAxis != 0;
+    return !(*posAxis == prev && *posAxis == 0);
 }
 
 void Joystick::begin() {
