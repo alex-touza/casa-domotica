@@ -10,7 +10,7 @@ class Pantalla;
 
 class Timer {
 public:
-    Timer(unsigned long _duration);
+    explicit Timer(unsigned long _duration);
     Timer();
 
     bool active;
@@ -18,8 +18,8 @@ public:
     unsigned long start;
 
     void reset();           // Reiniciar el temporitzador.
-    unsigned long delta();  // Temps des de l'últim reinici.
-    bool hasFinished();
+    unsigned long delta() const;  // Temps des de l'últim reinici.
+    bool hasFinished() const;
 };
 
 

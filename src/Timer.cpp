@@ -8,10 +8,10 @@ void Timer::reset() {
     this->start = millis();
 }
 
-unsigned long Timer::delta() {
+unsigned long Timer::delta() const {
     return millis() - this->start;
 }
 
-bool Timer::hasFinished() {
+bool Timer::hasFinished() const {
     return this->delta() > this->duration || !active;
 }
