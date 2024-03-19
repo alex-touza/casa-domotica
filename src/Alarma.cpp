@@ -4,9 +4,10 @@
 
 #include "Alarma.h"
 
-Alarma::Alarma(int buttonPin, int sensorPin, CRGB* _leds[], int _ledSize) : active(false), button(buttonPin),
-                                                                            sensor(sensorPin), leds(_leds),
-                                                                            ledsSize(_ledSize), interval(-1), mod(-1) {}
+Alarma::Alarma(int buttonPin, int sensorPin, CRGB* _leds[], int _ledsSize) : active(false), button(buttonPin),
+                                                                             sensor(sensorPin),
+                                                                             LEDArray(_leds, _ledsSize), interval(-1),
+                                                                             mod(-1) {}
 
 void Alarma::begin(int _interval, int _mod) {
     this->interval = _interval;
@@ -20,11 +21,7 @@ bool Alarma::read() {
     if (!this->sensor.read()) this->active = true; // NOLINT(*-branch-clone)
     else if (!this->button.read()) this->active = false;
 
-    CRGB::HTMLColorCode ledsColor = Alarma::colors[(millis() / this->interval) % this->mod && this->active];
-
-    for (int i = 0; i < this->ledsSize; ++i) {
-        *this->leds[i] = ledsColor;
-    }
+    this->setColorAll(Alarma::colors[(millis() / this->interval) % this->mod && this->active]);
 
     return this->active;
 }

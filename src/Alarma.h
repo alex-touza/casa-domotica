@@ -7,15 +7,14 @@
 
 #include "EntradaDigital.h"
 #include "FastLED.h"
+#include "LEDArray.h"
 
 using CDPins::EntradaDigital;
 
-class Alarma {
+class Alarma : private LEDArray {
 private:
-    const int ledsSize;
     EntradaDigital button;
     EntradaDigital sensor;
-    CRGB** leds;
 
     static CRGB::HTMLColorCode colors[2];
 
@@ -24,7 +23,7 @@ private:
 public:
     Alarma(int buttonPin, int sensorPin, CRGB* _leds[], int _ledsSize);
 
-   bool active;
+    bool active;
 
     void begin(int _interval, int _mod);
     bool read();
