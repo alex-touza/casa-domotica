@@ -12,12 +12,14 @@ enum InterruptModes {
 
 namespace CDPins {
     class EntradaDigital : public Pin {
+    private:
+        bool debounceActive;
     public:
         using Pin::Pin;
 
         void begin() override;
 
-        unsigned int read();
+        unsigned int read(bool debounce = false, bool invert = false);
 
         /*
         Equivalent a la funció integrada corresponent amb un
