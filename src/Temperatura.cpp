@@ -27,10 +27,10 @@ bool Temperatura::read() {
 
     *ledSetting = Temperatura::settingColors[level];
 
-    int dif = (round(this->value) - this->setting);
+    int dif = (int)(round(this->value) - this->setting);
 
-    if (dif < 0) {
-        this->fan->setSpeed(map(constrain(-dif, 0, 10), 0, 10, 100, 255));
+    if (dif > 0) {
+        this->fan->setSpeed(map(constrain(dif, 0, 10), 0, 10, 100, 255));
     } else this->fan->off();
 
     return this->process(this->value, Temperatura::tempColors);
@@ -39,4 +39,4 @@ bool Temperatura::read() {
 const int Temperatura::tempRangesList[2] = {20, 24};
 CRGB::HTMLColorCode Temperatura::tempColors[2] = {CRGB::Red, CRGB::Green};
 
-CRGB::HTMLColorCode Temperatura::settingColors[3] = {CRGB::Blue, CRGB::Green, CRGB::Red};
+CRGB::HTMLColorCode Temperatura::settingColors[3] = {CRGB::Red, CRGB::Green, CRGB::Blue};
