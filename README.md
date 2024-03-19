@@ -30,7 +30,7 @@ Codi font.
 
 El codi font d'aquestes llibreries es troba a la carpeta [`~/lib`](./lib).
 
-## Requeriments
+## Requisits
 Per a enviar el codi a la placa, es pot usar tant PlatformIO mateix com Arduino IDE.
 
 Si useu Arduino IDE, primer heu de fer que el codi sigui compatible. L'execució de l'script de processament necessita Python 3.11 o superior
@@ -40,17 +40,17 @@ També es recomana tenir l'extensió de [PlatformIO](https://platformio.org/) in
 les llibreries d'ESP32 i de `~/lib`.
 
 ## Execució
-### Amb PlatformIO
+### Amb PlatformIO (recomanat)
 Si useu PlatformIO, n'hi ha prou amb executar la commanda corresponent. Si no teniu accés a la vostra placa, podeu usar PlatformIO igualment per
 comprovar que el codi compila, ja que aquest és molt més ràpid que Arduino IDE.
 
 ### Amb Arduino IDE
 1. Copieu el contingut de `~/lib` a la carpeta corresponent d'Arduino (e.g. `Arduino/libraries`) perquè el projecte
    compili correctament.
-2. Instal·leu la placa ESP32 a Arduino IDE o PlaformIO.
-2. Executeu [`~/build_script/main.py`](./build_script/main.py) i seguiu les instruccions. Comproveu que teniu el
+2. Instal·leu la placa ESP32 a Arduino IDE.
+3. Executeu [`~/build_script/main.py`](./build_script/main.py) i seguiu les instruccions. Comproveu que teniu el
    paquet `colorama` instal·lat. Alternativament, també podeu descarregar una distribució del projecte des de Releases.
-3. Obriu la carpeta `~/dist/casa-domotica` a Arduino IDE i compileu.
+4. Obriu la carpeta `~/dist/casa-domotica` a Arduino IDE i compileu.
 
 ## TODO
 - Utilitzar llibreries d'Arduinoblocks per assegurar la compatibilitat amb ESP32 Steamakers
