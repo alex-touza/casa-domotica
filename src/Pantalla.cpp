@@ -42,5 +42,5 @@ bool Pantalla::idle() {
     Lines idleLines = {"T " + String(this->temp->value, 1) + " C (" + String(this->temp->setting) + " C)",
                        "H " + String(this->hum->value, 1) + " %"};
 
-    return this->update(idleLines, 0, false);
+    return this->update(idleLines, 0);
 }
