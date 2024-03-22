@@ -18,4 +18,4 @@ bool Humitat::read() {
 
 const int Humitat::rangesList[4] = {35, 45, 55, 65};
 
-CRGB::HTMLColorCode Humitat::colors[3] = {CRGB::Red, CRGB::Yellow, CRGB::Green};
+CRGB::HTMLColorCode Humitat::colors[3] = {CRGB::Red, CRGB::Orange, CRGB::Green};

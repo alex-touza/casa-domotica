@@ -37,6 +37,6 @@ bool Temperatura::read() {
 }
 
 const int Temperatura::tempRangesList[4] = {18, 20, 24, 26};
-CRGB::HTMLColorCode Temperatura::tempColors[3] = {CRGB::Red, CRGB::Yellow, CRGB::Green};
+CRGB::HTMLColorCode Temperatura::tempColors[3] = {CRGB::Red, CRGB::Orange, CRGB::Green};
 
 CRGB::HTMLColorCode Temperatura::settingColors[3] = {CRGB::Red, CRGB::Green, CRGB::Blue};
