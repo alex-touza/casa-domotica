@@ -7,7 +7,7 @@
 
 #include <DHT.h>
 #include <FastLED.h>
-#include "Range.h"
+#include "helpers/Range.h"
 
 class Sensor {
 private:

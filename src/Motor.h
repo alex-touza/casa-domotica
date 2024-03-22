@@ -4,8 +4,8 @@
 
 #ifndef CASA_DOMOTICA_MOTOR_H
 #define CASA_DOMOTICA_MOTOR_H
-#include "SortidaDigital.h"
-#include "SortidaAnalogica.h"
+#include "pins/SortidaDigital.h"
+#include "pins/SortidaAnalogica.h"
 
 using CDPins::SortidaAnalogica;
 using CDPins::SortidaDigital;

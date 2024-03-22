@@ -4,8 +4,8 @@
 
 #ifndef CASA_DOMOTICA_ILUMINACIO_H
 #define CASA_DOMOTICA_ILUMINACIO_H
-#include "LEDArray.h"
-#include "EntradaDigital.h"
+#include "helpers/LEDArray.h"
+#include "pins/EntradaDigital.h"
 
 using CDPins::EntradaDigital;
 class Iluminacio : private LEDArray {

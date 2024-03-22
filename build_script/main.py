@@ -1,6 +1,6 @@
-from shutil import copytree
+from shutil import copy2
 from glob import glob
-from os import chdir, system
+from os import chdir, system, mkdir
 from pathlib import Path
 from os.path import abspath, join, isdir
 from shutil import rmtree
@@ -16,18 +16,24 @@ ROOT = "../"
 ORIGIN_PATH = "./src"
 PROJECT_NAME = "casa-domotica"
 
-DESTINATION_PATH = f"./dist/{PROJECT_NAME}"
+DESTINATION_PATH = f"./dist/{PROJECT_NAME}/"
 ORIGIN_DIR_NAME = ORIGIN_PATH.split('/')[-1]
 
 ROOT_ABS = abspath(ROOT)
 ORIGIN_PATH_ABS = abspath(join(ROOT_ABS, ORIGIN_PATH))
 DESTINATION_PATH_ABS = abspath(join(ROOT_ABS, DESTINATION_PATH))
 
-sourceFiles = {"header": "h", "source": "cpp"}
+flatten_subdirectories = {"helpers", "pins"}
+source_files = {"header": "h", "source": "cpp"}
 
 postprocessing = [
     FindReplace("/main.cpp", [("#include <Arduino.h>\n", "")]),
-    Rename("/main.cpp", f"/{PROJECT_NAME}.ino")
+    Rename("/main.cpp", f"/{PROJECT_NAME}.ino"),
+    FindReplace("/Alarma.h", [("pins/", ""), ("helpers/", "")]),
+    FindReplace("/Iluminacio.h", [("pins/", ""), ("helpers/", "")]),
+    FindReplace("/Joystick.h", [("pins/", ""), ("helpers/", "")]),
+    FindReplace("/Motor.h", [("pins/", "")]),
+    FindReplace("/Sensor.h", [("helpers/", "")]),
 ]
 
 titol("CONFIG")
@@ -57,9 +63,11 @@ if isdir(DESTINATION_PATH_ABS):
 
 
 titol("FILES")
-files_dict = {t: glob(f"{ORIGIN_PATH_ABS}/*.{ext}") for t, ext in sourceFiles.items()}
+files_dict = {t: glob(f"{ORIGIN_PATH_ABS}/*.{ext}") for t, ext in source_files.items()}
 
 for t, files in files_dict.items():
+    for subdir in flatten_subdirectories:
+        files.extend(glob(f"{ORIGIN_PATH_ABS}\\{subdir}/*.{source_files[t]}"))
     for path in files:
         print(Colors.blau(f"{t} ./" + path[path.rfind(ROOT_ABS) + len(ROOT_ABS) + 1:].replace('\\', '/')))
 # for f in [abspath(p) for p in [glob(f"{ORIGIN_PATH_ABS}/*.{f}") for f in sourceFiles.values()]]:

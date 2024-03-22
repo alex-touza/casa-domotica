@@ -5,8 +5,8 @@
 #ifndef CASA_DOMOTICA_JOYSTICK_H
 #define CASA_DOMOTICA_JOYSTICK_H
 
-#include "EntradaAnalogica.h"
-#include "Timer.h"
+#include "pins/EntradaAnalogica.h"
+#include "helpers/Timer.h"
 
 using CDPins::EntradaAnalogica;
 

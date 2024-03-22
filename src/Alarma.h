@@ -5,9 +5,9 @@
 #ifndef CASA_DOMOTICA_ALARMA_H
 #define CASA_DOMOTICA_ALARMA_H
 
-#include "EntradaDigital.h"
+#include "pins/EntradaDigital.h"
 #include "FastLED.h"
-#include "LEDArray.h"
+#include "helpers/LEDArray.h"
 
 using CDPins::EntradaDigital;
 
