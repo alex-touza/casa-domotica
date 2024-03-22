@@ -39,6 +39,7 @@ bool Pantalla::update(const Lines& _lines, int id, bool forceRefresh) {
 }
 
 bool Pantalla::idle() {
+    // Comprovar si el valor del sensor és NaN (not a number)
     Lines idleLines = this->temp->value == this->temp->value ? Lines{"T " + String(this->temp->value, 1) + " C (" + String(this->temp->setting) + " C)",
                        "H " + String(this->hum->value, 1) + "%"} : Lines{"DHT Error", ""};
 
