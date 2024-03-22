@@ -21,7 +21,7 @@ public:
     void update();
 
     bool on;
-    int brightness;
+    unsigned int brightness;
 
     String brightnessStr() const;
 
