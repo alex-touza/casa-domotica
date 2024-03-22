@@ -108,7 +108,7 @@ for i, s in enumerate(postprocessing, 1):
         print(e)
         Colors.reset()
     else:
-        print(Colors.verd(f"Postprocessing rule #{i} of {n} executed successfully."))
+        print(Colors.verd(f"Postprocessing rule {i} of {n} executed successfully."))
 
 if n_errors:
     print(Colors.groc(f"Code processed with {n_errors} error(s)."))
