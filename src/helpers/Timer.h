@@ -5,8 +5,6 @@
 #ifndef CASA_DOMOTICA_TIMER_H
 #define CASA_DOMOTICA_TIMER_H
 
-// forward declaration per permetre friend Pantalla
-class Pantalla;
 
 class Timer {
 public:
