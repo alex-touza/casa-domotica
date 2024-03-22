@@ -40,7 +40,17 @@ bool Pantalla::update(const Lines& _lines, int id, bool forceRefresh) {
 
 bool Pantalla::idle() {
     Lines idleLines = {"T " + String(this->temp->value, 1) + " C (" + String(this->temp->setting) + " C)",
-                       "H " + String(this->hum->value, 1) + " %"};
+                       "H " + String(this->hum->value, 1) + "%"};
 
     return this->update(idleLines, 0);
+}
+
+unsigned char Pantalla::customChars[3][8] = {
+        {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0},
+        {0x1f,0x1f,0x1f,0x1f,0x1f,0x1f,0x1f},
+        {0x1f,0x11,0x11,0x11,0x11,0x11,0x1f},
+};
+
+unsigned char* Pantalla::getCustomChar(CustomChars name) {
+    return Pantalla::customChars[name];
 }

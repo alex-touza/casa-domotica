@@ -16,6 +16,12 @@ El compilador adverteix que la llibreria no està feta per ESP32,
  https://www.electronics-lab.com/project/using-16x2-i2c-lcd-display-esp32/#comment-398778
  */
 
+enum CustomChars {
+    Space = 0,
+    FilledSquare = 1,
+    Square = 2
+};
+
 class Temperatura;
 
 struct Lines {
@@ -49,6 +55,8 @@ public:
 
     Lines lines;
 
+    static unsigned char customChars[3][8];
+    static unsigned char* getCustomChar(CustomChars name); // Mida 8
 };
 
 

@@ -6,6 +6,7 @@
 #include "Humitat.h"
 #include "Motor.h"
 #include "Alarma.h"
+#include "Iluminacio.h"
 
 const Axis DIR_TEMP_SETTING = Y;
 const Axis DIR_ILUM = X;
@@ -14,6 +15,8 @@ enum Pantalles {
     ALT = -1,
     IDLE = 0,
     TEMPSET = 1,
+    LIGHTSET = 2,
+    LIGHTOFF = 3
 };
 
 CRGB leds[8];
@@ -49,7 +52,7 @@ Pantalla pantalla(&temperatura, &humitat);
 
 CRGB* ilumLeds[]{leds + 5, leds + 6, leds + 7};
 
-LEDArray iluminacio(ilumLeds, 3);
+Iluminacio iluminacio(13, ilumLeds, 3);
 EntradaDigital botoIluminacio(13);
 bool ilumEncesa = false;
 int llum = 255;
@@ -65,7 +68,7 @@ void setup() {
 
     joystick.begin();
     joystickCooldown.active = false;
-    
+
     FastLED.addLeds<WS2812B, 27, GRB>(leds, 8); // NOLINT(*-static-accessed-through-instance)
     FastLED.setBrightness(80);
 
@@ -77,7 +80,8 @@ void setup() {
 
     ventilador.begin();
 
-    botoIluminacio.begin();
+    //botoIluminacio.begin();
+    iluminacio.begin();
 
     Serial.begin(9600);
 
@@ -91,37 +95,61 @@ void setup() {
 
 void loop() {
     // Lectura dels receptors
-    temperatura.read();
+    // També il·luminen els LEDs corresponents.
+    temperatura.read(); // També fa funcionar el ventilador
     humitat.read();
 
-    bool joystickActiu = joystick.read(DIR_TEMP_SETTING);
-    joystick.read(DIR_ILUM);
+    bool joystickTempActiu = joystick.read(DIR_TEMP_SETTING);
+    bool joystickLlumActiu = joystick.read(DIR_ILUM);
 
     alarma.read();
+    iluminacio.read();
 
-    if (joystickActiu) {
+
+    if (joystickLlumActiu) {
+        int pos = *joystick.getPos(DIR_ILUM);
+
+        if (iluminacio.on) {
+            if (joystickCooldown.hasFinished() && pantalla.screenId == Pantalles::LIGHTSET && abs(pos) > 25) {
+                joystickCooldown.active = true;
+                joystickCooldown.reset();
+
+                // Pujar/baixar la brillantor 16 unitats, o 32 si el joystick està al màxim
+                iluminacio.changeBrightness((pos < 0 ? -1 : 1) * (16 * ( 1 + (abs(pos) > 90))));
+            } else joystickCooldown.active = false;
+
+            pantalla.update("Brillantor llums", String(((float)iluminacio.brightness) / 2.55, 1) + "%", Pantalles::LIGHTSET);
+        } else {
+            pantalla.update("Llums apagats", "", Pantalles::LIGHTOFF);
+        }
+
+
+
+
+    } else if (joystickTempActiu) {
         int pos = *joystick.getPos(DIR_TEMP_SETTING);
 
         if (joystickCooldown.hasFinished() && pantalla.screenId == Pantalles::TEMPSET && abs(pos) > 25) {
             joystickCooldown.active = true;
             joystickCooldown.reset();
             temperatura.setting += (pos < 0 ? -1 : 1) * (1 + (abs(pos) > 90));
-        }
+        } else joystickCooldown.active = false;
 
         pantalla.update("Establint temp", String(temperatura.setting) + " C", Pantalles::TEMPSET);
-        
+
     } else {
         joystickCooldown.active = false;
         pantalla.idle();
     }
 
-    if (botoIluminacio.read(true, true)) ilumEncesa = !ilumEncesa;
+
+    /*
     CRGB color;
     if (ilumEncesa) {
-      int v = map(*joystick.getPos(DIR_ILUM), 0, 100, 0, 255);
-      color.setHSV(0, 0, llum);
+        int v = map(*joystick.getPos(DIR_ILUM), 0, 100, 0, 255);
+        color = CHSV(0, 0, llum);
     } else
-      color = CRGB::Black;
+        color = CRGB::Black;
 
     iluminacio.setColorAll(color);
 
