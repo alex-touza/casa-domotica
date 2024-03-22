@@ -83,7 +83,12 @@ print("--------------")
 print(Colors.blau(f"Copying directory {ORIGIN_PATH} to {DESTINATION_PATH}..."))
 
 try:
-    copytree(ORIGIN_PATH_ABS, DESTINATION_PATH_ABS, dirs_exist_ok=True)
+    mkdir(DESTINATION_PATH_ABS)
+    print("Created destination directory")
+    for fl in list(files_dict.values()):
+        for file in fl:
+            print("Copied file", copy2(file, DESTINATION_PATH_ABS))
+
 except Exception as e:
     print(Colors.error(f"Error occured while copying."))
     print(e)
