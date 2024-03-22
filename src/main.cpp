@@ -118,9 +118,10 @@ void loop() {
                 iluminacio.changeBrightness((pos < 0 ? -1 : 1) * (8 * ( 1 + (abs(pos) > 90))));
             } else joystickCooldown.active = false;
 
-            pantalla.update("Brillantor llums", String(((float)iluminacio.brightness) / 2.55, 1) + "%", Pantalles::LIGHTSET);
+            pantalla.update("Brillantor llums", String(((float)iluminacio.brightness) / 2.55, 0) + "%", Pantalles::LIGHTSET);
         } else {
             pantalla.update("Llums apagats", "", Pantalles::LIGHTOFF);
+            joystickCooldown.active = false;
         }
 
 
