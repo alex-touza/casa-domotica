@@ -59,7 +59,7 @@ int llum = 255;
 
 
 void setup() {
-    alarma.begin(1000, 2);
+    alarma.begin(400, 2);
 
     //bool* alarmaPtr = &ALARMA;
 
@@ -143,15 +143,6 @@ void loop() {
     }
 
 
-    /*
-    CRGB color;
-    if (ilumEncesa) {
-        int v = map(*joystick.getPos(DIR_ILUM), 0, 100, 0, 255);
-        color = CHSV(0, 0, llum);
-    } else
-        color = CRGB::Black;
-
-    iluminacio.setColorAll(color);
 
     FastLED.show();
     delay(100);
