@@ -39,8 +39,8 @@ bool Pantalla::update(const Lines& _lines, int id, bool forceRefresh) {
 }
 
 bool Pantalla::idle() {
-    Lines idleLines = {"T " + String(this->temp->value, 1) + " C (" + String(this->temp->setting) + " C)",
-                       "H " + String(this->hum->value, 1) + "%"};
+    Lines idleLines = this->temp->value == this->temp->value ? Lines{"T " + String(this->temp->value, 1) + " C (" + String(this->temp->setting) + " C)",
+                       "H " + String(this->hum->value, 1) + "%"} : Lines{"DHT Error", ""};
 
     return this->update(idleLines, 0);
 }
