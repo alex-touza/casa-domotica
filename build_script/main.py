@@ -116,5 +116,4 @@ else:
     print(Colors.verd("Code processed successfully."))
 
 print()
-print(Colors.blau("Don't forget to copy the libraries to the correct location!"))
 input("Press enter to exit")
