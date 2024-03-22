@@ -115,7 +115,7 @@ void loop() {
                 joystickCooldown.reset();
 
                 // Pujar/baixar la brillantor 16 unitats, o 32 si el joystick està al màxim
-                iluminacio.changeBrightness((pos < 0 ? -1 : 1) * (16 * ( 1 + (abs(pos) > 90))));
+                iluminacio.changeBrightness((pos < 0 ? -1 : 1) * (8 * ( 1 + (abs(pos) > 90))));
             } else joystickCooldown.active = false;
 
             pantalla.update("Brillantor llums", String(((float)iluminacio.brightness) / 2.55, 1) + "%", Pantalles::LIGHTSET);
