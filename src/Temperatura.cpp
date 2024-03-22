@@ -6,7 +6,7 @@
 
 Temperatura::Temperatura(int initSetting, DHT* _dht, CRGB* _ledTemp, CRGB* _ledSetting, Motor* _fan) :
         dht(_dht), ledSetting(_ledSetting), setting(initSetting), fan(_fan),
-        Sensor(_ledTemp, {Temperatura::tempRangesList, 2, true}) {}
+        Sensor(_ledTemp, {Temperatura::tempRangesList, 4, true}) {}
 
 void Temperatura::begin() {
     this->read();
