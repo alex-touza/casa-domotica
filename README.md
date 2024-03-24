@@ -11,7 +11,7 @@ Script de còpia i processament del projecte per al seu ús a Arduino IDE. Vegeu
 Diagrames [PlantUML](https://plantuml.com/) del projecte:
 
 - Diagrama de classes
-- Diagrama de seqüència
+- Diagrama d'activitat (i.e. de flux)
 
 ### [lib](./lib)
 
