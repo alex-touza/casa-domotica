@@ -10,14 +10,6 @@ class Modificador:
 	def __str__(self):
 		return self.c
 
-	@overload
-	def __call__(self, text: str) -> str:
-		pass
-
-	@overload
-	def __call__(self, text:None=None) -> None:
-		pass
-
 	def __call__(self, text: str | None=None) -> str | None:
 		if text is None:
 			print(self.c, end="")
