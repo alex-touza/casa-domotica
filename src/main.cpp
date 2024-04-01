@@ -11,6 +11,8 @@
 const Axis DIR_TEMP_SETTING = Y;
 const Axis DIR_ILUM = X;
 
+const int DEFAULT_TEMP = 24;
+
 enum Pantalles {
     ALT = -1,
     IDLE = 0,
@@ -45,7 +47,7 @@ Timer joystickCooldown(250);
 Motor ventilador(23, 19, 5);
 
 DHT dht = Sensor::initDHT(17);
-Temperatura temperatura(24, &dht, leds, leds + 2, &ventilador);
+Temperatura temperatura(DEFAULT_TEMP, &dht, leds, leds + 2, &ventilador);
 Humitat humitat(&dht, leds + 1);
 
 Pantalla pantalla(&temperatura, &humitat);
@@ -115,10 +117,11 @@ void loop() {
                 joystickCooldown.reset();
 
                 // Pujar/baixar la brillantor 16 unitats, o 32 si el joystick està al màxim
-                iluminacio.changeBrightness((pos < 0 ? -1 : 1) * (8 * ( 1 + (abs(pos) > 90))));
+                iluminacio.changeBrightness((pos < 0 ? -1 : 1) * (8 * (1 + (abs(pos) > 90))));
             } else joystickCooldown.active = false;
 
-            pantalla.update("Brillantor llums", String(((float)iluminacio.brightness) / 2.55, 0) + "%", Pantalles::LIGHTSET);
+            pantalla.update("Brillantor llums", String(((float) iluminacio.brightness) / 2.55, 0) + "%",
+                            Pantalles::LIGHTSET);
         } else {
             pantalla.update("Llums apagats", "", Pantalles::LIGHTOFF);
             joystickCooldown.active = false;
