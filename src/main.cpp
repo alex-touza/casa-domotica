@@ -107,6 +107,8 @@ void loop() {
     alarma.read();
     iluminacio.read();
 
+    if (joystick.isPressed(true)) temperatura.setting = (int) round(temperatura.value);
+
 
     if (joystickLlumActiu) {
         int pos = *joystick.getPos(DIR_ILUM);
