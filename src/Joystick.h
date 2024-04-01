@@ -6,9 +6,11 @@
 #define CASA_DOMOTICA_JOYSTICK_H
 
 #include "pins/EntradaAnalogica.h"
+#include "pins/EntradaDigital.h"
 #include "helpers/Timer.h"
 
 using CDPins::EntradaAnalogica;
+using CDPins::EntradaDigital;
 
 template<typename T>
 struct Pair {
@@ -31,15 +33,18 @@ private:
     int* getPosPtr(Axis axis);
 
 protected:
-    Pair<EntradaAnalogica> pins;
+    Pair<EntradaAnalogica> axisPins;
+    EntradaDigital buttonPin;
 public:
-    Joystick(int _pinX, int _pinY, int deadzone);
+    Joystick(int _pinX, int _pinY, int _buttonPin, int deadzone);
 
     void begin();
 
     // Retornen true si la posició ha canviat des de l'última lectura.
     bool read(Axis axis); // Llegir un eix
     bool read();          // Llegir els dos eixos
+
+    bool isPressed(bool debounce);
 
     // Obtenir accés de només lectura a la posició d'un eix
     const int* getPos(Axis axis);
