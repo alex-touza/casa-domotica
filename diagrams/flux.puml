@@ -37,10 +37,15 @@ endif
 if (obstacle detectat?) then (SÍ)
  ->
  :LED 4 i LED 5 = vermell intermitent;
+ if (polsador 1 premut?) then (SÍ)
+  ->
+  :LED 4 i LED 5 = OFF;
+  else (NO)
+ endif
  else (NO)
  :LED 4 i LED 5 = off;
 endif
-if (polsador 1 premut?) then (SÍ)
+if (polsador 2 premut?) then (SÍ)
  -> 
  :LED 6, LED 7 i LED 8 = blanc;
  else (NO)
