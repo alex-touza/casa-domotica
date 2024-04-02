@@ -1,0 +1,50 @@
+@startuml
+Start;
+:temp consigna = 20-24°C;
+:encendre pantalla LCD;
+:encendre LEDs;
+:encendre detector d'obstacles;
+:Llegir detector d'obstacles;
+:Llegir temperatura;
+:Llegir humitat;
+:mostrar temp i hum a la pantalla;
+repeat
+if (35<hum>60 ?) then (SÍ)
+ ->
+ :LED 2 = verd;
+ else (NO)
+ ->
+ :LED 2 = vermell;
+endif
+if (20<temp>24 ?) then (SÍ)
+ ->
+ :LED 1 = verd;
+ else (NO)
+ -> 
+ :LED 1 = vermell;
+if (temp > 24) then (SÍ)
+  ->
+  :LED 3 = blau;
+  :encendre ventilació;
+  else (NO)
+   if (temp < 20 ?) then (SÍ)
+   -> 
+   :LED 3 = vermell;
+   :encendre calefació;
+endif
+endif
+endif
+if (obstacle detectat?) then (SÍ)
+ ->
+ :LED 4 i LED 5 = vermell intermitent;
+ else (NO)
+ :LED 4 i LED 5 = off;
+endif
+if (polsador 1 premut?) then (SÍ)
+ -> 
+ :LED 6, LED 7 i LED 8 = blanc;
+ else (NO)
+ :LED 6, LED 7 i LED 8 = off;
+endif
+
+@enduml
