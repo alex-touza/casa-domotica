@@ -41,7 +41,7 @@ Compte amb els punters a ítems de les llistes. Com que les classes
 CRGB* alarmaLeds[]{leds + 3, leds + 4};
 
 Alarma alarma(25, 16, alarmaLeds, 2);
-Joystick joystick(34, 35, 0, 10);
+Joystick joystick(34, 35, 14, 10);
 Timer joystickCooldown(250);
 
 Motor ventilador(23, 19, 5);
