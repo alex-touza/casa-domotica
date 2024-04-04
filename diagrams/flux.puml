@@ -48,6 +48,11 @@ endif
 if (polsador 2 premut?) then (SÍ)
  -> 
  :LED 6, LED 7 i LED 8 = blanc;
+  if (X Joystick mogut?) then (A la dreta)
+  :augmentar brillor;
+  else (A l'esquerra)
+  :disminuir brillor;
+  endif
  else (NO)
  :LED 6, LED 7 i LED 8 = off;
 endif
