@@ -17,8 +17,8 @@ void Pantalla::begin() {
     this->idle();
 }
 
-bool Pantalla::update(const String& upperLine, const String& lowerLine, int id, bool forceRefresh) {
-    if (this->lines == Lines{upperLine, lowerLine} && !forceRefresh) return false;
+void Pantalla::update(const String& upperLine, const String& lowerLine, int id, bool forceRefresh) {
+    if (this->lines == Lines{upperLine, lowerLine} && !forceRefresh) return;
 
     this->screenId = id;
 
@@ -30,20 +30,19 @@ bool Pantalla::update(const String& upperLine, const String& lowerLine, int id, 
     this->print(upperLine);
     this->setCursor(0, 1);
     this->print(lowerLine);
-    return true;
 }
 
-bool Pantalla::update(const Lines& _lines, int id, bool forceRefresh) {
-    if (this->lines == _lines && !forceRefresh) return false;
+void Pantalla::update(const Lines& _lines, int id, bool forceRefresh) {
+    if (this->lines == _lines && !forceRefresh) return;
     return this->update(_lines.upperLine, _lines.lowerLine, id, forceRefresh);
 }
 
-bool Pantalla::idle() {
+void Pantalla::idle() {
     // Comprovar si el valor del sensor és NaN (not a number)
     Lines idleLines = this->temp->value == this->temp->value ? Lines{"T " + String(this->temp->value, 1) + " C (" + String(this->temp->setting) + " C)",
                        "H " + String(this->hum->value, 1) + "%"} : Lines{"DHT Error", ""};
 
-    return this->update(idleLines, 0);
+    this->update(idleLines, 0);
 }
 
 unsigned char Pantalla::customChars[3][8] = {

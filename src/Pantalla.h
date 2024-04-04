@@ -45,11 +45,11 @@ public:
      *
      * Retorna true si la pantalla s'ha refrescat.
      */
-    bool update(const String& upperLine, const String& lowerLine, int id = -1, bool forceRefresh = false);
+    void update(const String& upperLine, const String& lowerLine, int id = -1, bool forceRefresh = false);
 
-    bool update(const Lines& _lines, int id = -1, bool forceRefresh = false);
+    void update(const Lines& _lines, int id = -1, bool forceRefresh = false);
 
-    bool idle();
+    void idle();
 
     int screenId;
 
