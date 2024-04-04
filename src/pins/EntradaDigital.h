@@ -12,8 +12,6 @@ enum InterruptModes {
 
 namespace CDPins {
     class EntradaDigital : public Pin {
-    private:
-        bool debounceActive;
     public:
         using Pin::Pin;
 
