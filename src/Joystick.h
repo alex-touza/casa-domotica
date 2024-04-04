@@ -23,6 +23,13 @@ enum Axis {
     Y
 };
 
+
+struct JoystickState {
+    Axis axis;
+    int pos;
+    bool idle;
+};
+
 class Joystick {
 private:
     int deadzone;
@@ -43,8 +50,11 @@ public:
     // Retornen true si la posició ha canviat des de l'última lectura.
     bool read(Axis axis); // Llegir un eix
     bool read();          // Llegir els dos eixos
+    bool readState();     // Llegir i actualitzar state
 
-    bool isPressed(bool debounce);
+    JoystickState state;
+
+    bool isPressed(bool debounce = false);
 
     // Obtenir accés de només lectura a la posició d'un eix
     const int* getPos(Axis axis);

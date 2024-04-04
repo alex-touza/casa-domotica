@@ -98,25 +98,21 @@ void loop() {
     temperatura.read(); // També fa funcionar el ventilador
     humitat.read();
 
-    bool joystickTempActiu = joystick.read(DIR_TEMP_SETTING);
-    bool joystickLlumActiu = joystick.read(DIR_ILUM);
-
     alarma.read();
     iluminacio.read();
+    joystick.readState();
 
     if (joystick.isPressed(true)) temperatura.setting = (int) round(temperatura.value);
 
 
-    if (joystickLlumActiu) {
-        int pos = *joystick.getPos(DIR_ILUM);
-
+    if (joystick.state.axis == DIR_ILUM && joystick.state.idle) {
         if (iluminacio.on) {
-            if (joystickCooldown.hasFinished() && pantalla.screenId == Pantalles::LIGHTSET && abs(pos) > 25) {
+            if (joystickCooldown.hasFinished() && pantalla.screenId == Pantalles::LIGHTSET && abs(joystick.state.pos) > 25) {
                 joystickCooldown.active = true;
                 joystickCooldown.reset();
 
                 // Pujar/baixar la brillantor 16 unitats, o 32 si el joystick està al màxim
-                iluminacio.changeBrightness((pos < 0 ? -1 : 1) * (8 * (1 + (abs(pos) > 90))));
+                iluminacio.changeBrightness((joystick.state.pos < 0 ? -1 : 1) * (8 * (1 + (abs(joystick.state.pos) > 90))));
             } else joystickCooldown.active = false;
 
             pantalla.update("Brillantor llums", iluminacio.brightnessStr(),
@@ -127,13 +123,11 @@ void loop() {
         }
 
 
-    } else if (joystickTempActiu) {
-        int pos = *joystick.getPos(DIR_TEMP_SETTING);
-
-        if (joystickCooldown.hasFinished() && pantalla.screenId == Pantalles::TEMPSET && abs(pos) > 25) {
+    } else if (joystick.state.axis == DIR_TEMP_SETTING && joystick.state.idle) {
+        if (joystickCooldown.hasFinished() && pantalla.screenId == Pantalles::TEMPSET && abs(joystick.state.pos) > 25) {
             joystickCooldown.active = true;
             joystickCooldown.reset();
-            temperatura.setting += (pos < 0 ? -1 : 1) * (1 + (abs(pos) > 90));
+            temperatura.setting += (joystick.state.pos < 0 ? -1 : 1) * (1 + (abs(joystick.state.pos) > 90));
         } else joystickCooldown.active = false;
 
         pantalla.update("Establint temp", String(temperatura.setting) + " C", Pantalles::TEMPSET);

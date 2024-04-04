@@ -51,3 +51,25 @@ const int* Joystick::getPos(Axis axis) {
 bool Joystick::isPressed(bool debounce) {
     return this->buttonPin.read(debounce, false);
 }
+
+bool Joystick::readState() {
+    bool active = this->read();
+
+    if (this->state.idle && active) {
+        if (this->pos.x > this->pos.y + 10) {
+            this->state.axis = X;
+            this->state.pos = this->pos.x;
+            this->state.idle = false;
+        } else if (this->pos.y > this->pos.x + 10) {
+            this->state.axis = Y;
+            this->state.pos = this->pos.y;
+            this->state.idle = false;
+        }
+    } else if (active) {
+        this->state.pos = *this->getPos(this->state.axis);
+    } else {
+        this->state.idle = true;
+    }
+
+    return active;
+}
