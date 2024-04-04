@@ -17,19 +17,6 @@ void Iluminacio::changeBrightness(int delta) {
     this->update();
 }
 
-String Iluminacio::brightnessStr() const {
-    String num = String(this->brightness) + "%";
-
-    while (num.length() < 5) {
-        num += " ";
-    }
-
-    int barLength = 11;
-
-
-    return num;
-}
-
 void Iluminacio::read() {
     if (this->button.read(true, true)) {
         this->on = !this->on;
@@ -39,4 +26,21 @@ void Iluminacio::read() {
 
 void Iluminacio::update() {
     this->setColorAll(CHSV{0, 0, static_cast<uint8_t>(this->on ? this->brightness : 0)});
+}
+
+String Iluminacio::brightnessStr() const {
+    static int prev = -1;
+    static String str = "";
+
+    if (prev == -1 || prev != this->brightness) {
+        if (this->on) {
+            str = String(((float) this->brightness) / 2.55, 0) + "%";
+        } else {
+            str = "OFF";
+        }
+    }
+
+    prev = this->brightness;
+
+    return str;
 }

@@ -50,14 +50,11 @@ DHT dht = Sensor::initDHT(17);
 Temperatura temperatura(DEFAULT_TEMP, &dht, leds, leds + 2, &ventilador);
 Humitat humitat(&dht, leds + 1);
 
-Pantalla pantalla(&temperatura, &humitat);
-
 CRGB* ilumLeds[]{leds + 5, leds + 6, leds + 7};
 
 Iluminacio iluminacio(13, ilumLeds, 3);
-EntradaDigital botoIluminacio(13);
-bool ilumEncesa = false;
-int llum = 255;
+
+Pantalla pantalla(&temperatura, &humitat, &iluminacio);
 
 
 void setup() {
@@ -122,7 +119,7 @@ void loop() {
                 iluminacio.changeBrightness((pos < 0 ? -1 : 1) * (8 * (1 + (abs(pos) > 90))));
             } else joystickCooldown.active = false;
 
-            pantalla.update("Brillantor llums", String(((float) iluminacio.brightness) / 2.55, 0) + "%",
+            pantalla.update("Brillantor llums", iluminacio.brightnessStr(),
                             Pantalles::LIGHTSET);
         } else {
             pantalla.update("Llums apagats", "", Pantalles::LIGHTOFF);

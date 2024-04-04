@@ -9,6 +9,7 @@
 #include <LiquidCrystal_I2C.h>
 #include "Temperatura.h"
 #include "Humitat.h"
+#include "Iluminacio.h"
 
 /*
 El compilador adverteix que la llibreria no està feta per ESP32,
@@ -35,8 +36,10 @@ class Pantalla : private LiquidCrystal_I2C {
 private:
     Temperatura* temp;
     Humitat* hum;
+    Iluminacio* ilum;
+
 public:
-    explicit Pantalla(Temperatura* _temp, Humitat* _hum);
+    Pantalla(Temperatura* _temp, Humitat* _hum, Iluminacio* _ilum);
 
     void begin();
 
