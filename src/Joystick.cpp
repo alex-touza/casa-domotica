@@ -6,7 +6,8 @@
 
 Joystick::Joystick(int _pinX, int _pinY, int _buttonPin, int _deadzone = 10) : deadzone(_deadzone), pos({0, 0}),
                                                                axisPins({EntradaAnalogica{_pinX},
-                                                                         EntradaAnalogica{_pinY}}), buttonPin(_buttonPin) {}
+                                                                         EntradaAnalogica{_pinY}}), buttonPin(_buttonPin),
+                                                                         state({X, 0, false, true}){}
 
 bool Joystick::read() {
     // Operador OR que no curtcircuita perquè s'evaluïn els dos operands.
@@ -23,12 +24,9 @@ bool Joystick::read(Axis axis) {
     // Aplicar la deadzone.
     auto round = [=](int _pos) -> int { return abs(_pos) > this->deadzone ? _pos : 0; };
 
-    int prev = *posAxis;
-
     *posAxis = round(::map((int) pin->read(), 0, 4095, -100, 100));
 
-
-    return !(*posAxis == prev && *posAxis == 0);
+    return *posAxis != 0;
 }
 
 void Joystick::begin() {
@@ -41,7 +39,6 @@ void Joystick::begin() {
 // TODO Utilitzar template perquè es pugui utilitzar també per a axisPins
 int* Joystick::getPosPtr(Axis axis) {
     return axis == X ? &this->pos.x : &this->pos.y;
-
 }
 
 // Aquest és el mètode públic. No hauríem de voler canviar la
