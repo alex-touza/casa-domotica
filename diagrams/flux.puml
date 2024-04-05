@@ -61,6 +61,7 @@ else (NO)
 endif
 if (polasador 1 premut?) then (SÍ)
  :canviar estació;
+ :mostrar època de l'any a la pantalla;
 else (NO)
 endif
 
