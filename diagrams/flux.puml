@@ -1,7 +1,7 @@
 @startuml
 Start;
 :temp consigna estiu = 20-29ºC;
-:temp consigna hivern = 17-26ªC;
+:temp consigna hivern = 17-26ºC;
 :encendre pantalla LCD;
 :encendre LEDs;
 :encendre detector d'obstacles;
