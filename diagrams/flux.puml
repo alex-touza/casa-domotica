@@ -1,6 +1,7 @@
 @startuml
 Start;
-:temp consigna = 20-24°C;
+:temp consigna estiu = 20-29ºC;
+:temp consigna hivern = 17-26ªC;
 :encendre pantalla LCD;
 :encendre LEDs;
 :encendre detector d'obstacles;
@@ -31,7 +32,7 @@ endif
 endif
 if (obstacle detectat?) then (SÍ)
  :LED 4 i LED 5 = vermell intermitent;
- :mostrar a la pantalla: ALARMA;
+ :mostrar a la pantalla: ALARMA ACTIVADA: ALERTA;
  if (polsador 1 premut?) then (SÍ)
   :LED 4 i LED 5 = OFF;
   else (NO)
@@ -56,6 +57,10 @@ else (Abaix)
 endif
 if (Botó Joystick premut?) then (SÍ)
  :temp consigna = 24;
+else (NO)
+endif
+if (polasador 1 premut?) then (SÍ)
+ :canviar estació;
 else (NO)
 endif
 
