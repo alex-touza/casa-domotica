@@ -11,7 +11,7 @@ Start;
 :Llegir brillor illuminació;
 :mostrar temp consigna, temp actual, hum i brillor a la pantalla;
 repeat
-if (35<hum>60 ?) then (SÍ)
+if (35 < hum < 65 ?) then (SÍ)
  :LED 2 = verd;
  else (NO)
  :LED 2 = vermell;
@@ -24,7 +24,7 @@ if (temp > consigna) then (SÍ)
   :LED 3 = blau;
   :encendre ventilació;
   else (NO)
-   if (temp < consigna ?) then (SÍ)
+   if (temp <consigna ?) then (SÍ)
    :LED 3 = vermell;
    :encendre calefació;
 endif
@@ -61,7 +61,7 @@ else (NO)
 endif
 if (polasador 1 premut?) then (SÍ)
  :canviar estació;
- :mostrar època de l'any a la pantalla;
+ :mostrar estació a la pantalla;
 else (NO)
 endif
 
