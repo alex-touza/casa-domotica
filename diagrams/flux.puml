@@ -8,8 +8,8 @@ Start;
 :Llegir detector d'obstacles;
 :Llegir temperatura;
 :Llegir humitat;
-:Llegir brillor illuminació;
-:mostrar temp consigna, temp actual, hum i brillor a la pantalla;
+:Llegir brillantor illuminació;
+:mostrar temp consigna, temp actual, hum i brillantor a la pantalla;
 repeat
 if (35 < hum < 65 ?) then (SÍ)
  :LED 2 = verd;
@@ -43,9 +43,9 @@ endif
 if (polsador 2 premut?) then (SÍ)
  :LED 6, LED 7 i LED 8 = blanc;
   if (X Joystick mogut?) then (A la dreta)
-  :augmentar brillor;
+  :augmentar brillantor;
   else (A l'esquerra)
-  :disminuir brillor;
+  :disminuir brillantor;
   endif
  else (NO)
  :LED 6, LED 7 i LED 8 = OFF;
