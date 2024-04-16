@@ -1,3 +1,5 @@
+
+'TODO utilitzar altres formes per mostrar o llegir dades
 @startuml
 Start;
 :temp consigna estiu = 20-29ºC;
@@ -10,6 +12,7 @@ Start;
 :Llegir humitat;
 :Llegir brillantor illuminació;
 :mostrar temp consigna, temp actual, hum i brillantor a la pantalla;
+
 repeat
 if (35 < hum < 65 ?) then (SÍ)
  :LED 2 = verd;
