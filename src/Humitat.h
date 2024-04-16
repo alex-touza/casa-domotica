@@ -9,7 +9,7 @@
 
 class Humitat : public Sensor {
 private:
-    static const int rangesList[];
+    static int rangesList[];
     static CRGB::HTMLColorCode colors[];
 
     DHT* dht;

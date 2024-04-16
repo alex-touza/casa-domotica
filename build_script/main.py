@@ -30,6 +30,7 @@ postprocessing = [
     FindReplace("/main.cpp", [("#include <Arduino.h>\n", "")]),
     Rename("/main.cpp", f"/{PROJECT_NAME}.ino"),
     FindReplace("/Alarma.h", [("pins/", ""), ("helpers/", "")]),
+    FindReplace("/Pantalla.h", [("pins/", ""), ("helpers/", "")]),
     FindReplace("/Iluminacio.h", [("pins/", ""), ("helpers/", "")]),
     FindReplace("/Joystick.h", [("pins/", ""), ("helpers/", "")]),
     FindReplace("/Motor.h", [("pins/", "")]),

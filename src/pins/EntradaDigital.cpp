@@ -4,10 +4,10 @@
 
 void CDPins::EntradaDigital::begin() {
     pinMode(this->pin, INPUT);
+    this->active = false;
 }
 
 unsigned int CDPins::EntradaDigital::read(bool debounce, bool invert) {
-    static bool active = false;
 
     unsigned int _value = digitalRead(this->pin);
     if (invert) _value = !_value;
@@ -15,11 +15,11 @@ unsigned int CDPins::EntradaDigital::read(bool debounce, bool invert) {
     if (debounce) {
         if (_value) {
             _value = 0;
-            active = true;
+            this->active = true;
 
-        } else if (active) {
+        } else if (this->active) {
             _value = 1;
-            active = false;
+            this->active = false;
         }
 
     }

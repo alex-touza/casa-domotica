@@ -4,7 +4,7 @@
 
 #include "Iluminacio.h"
 
-Iluminacio::Iluminacio(int pinButton, CRGB** _leds, int _ledsSize) : brightness(255), on(false), button(pinButton),
+Iluminacio::Iluminacio(int pinButton, CRGB** _leds, int _ledsSize) : brightness(255), isOn(false), button(pinButton),
                                                                      LEDArray(_leds, _ledsSize) {}
 
 void Iluminacio::begin() {
@@ -17,30 +17,34 @@ void Iluminacio::changeBrightness(int delta) {
     this->update();
 }
 
-void Iluminacio::read() {
+bool Iluminacio::read() {
     if (this->button.read(true, true)) {
-        this->on = !this->on;
+        Serial.println("lights button pressed");
+        Serial.println();
+
+        this->isOn = !this->isOn;
         update();
+        return true;
     }
+    return false;
 }
 
 void Iluminacio::update() {
-    this->setColorAll(CHSV{0, 0, static_cast<uint8_t>(this->on ? this->brightness : 0)});
+    this->setColorAll(CHSV{0, 0, static_cast<uint8_t>(this->isOn ? this->brightness : 0)});
 }
 
 String Iluminacio::brightnessStr() const {
-    static int prev = -1;
-    static String str = "";
+    String str = "";
 
-    if (prev == -1 || prev != this->brightness) {
-        if (this->on) {
-            str = String(((float) this->brightness) / 2.55, 0) + "%";
-        } else {
-            str = "OFF";
-        }
+    if (this->isOn) {
+        str = String(((float) this->brightness) / 2.55, 0) + "%";
+    } else {
+        str = "OFF";
     }
 
-    prev = this->brightness;
+
+    Serial.println("brightness " + str);
+    Serial.println();
 
     return str;
 }

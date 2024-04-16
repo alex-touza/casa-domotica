@@ -11,6 +11,8 @@ using CDPins::SortidaAnalogica;
 using CDPins::SortidaDigital;
 
 class Motor {
+private:
+    unsigned int prevSpeed;
 protected:
     SortidaDigital inA;
     SortidaDigital inB;
@@ -30,7 +32,6 @@ public:
     bool active;
 
     const unsigned int* speed; // punter a en.value
-    unsigned int prevSpeed;
 
     bool direction; // true: A, false: B
 };

@@ -12,13 +12,11 @@
 class Sensor {
 private:
     CRGB* led;
-
+protected:
     // No és un punter perquè pugui ser passat directament
     // com a paràmetre en lloc de ser creat amb una variable
     // temporal.
     Range range;
-
-protected:
     // Processar un valor llegit des de la funció de la
     // classe filla.
     bool process(double _value, CRGB::HTMLColorCode colors[]);

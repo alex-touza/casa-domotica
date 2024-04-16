@@ -8,8 +8,6 @@
 Sensor::Sensor(CRGB* _led, Range _range) : led(_led), range(_range), value(0) {}
 
 bool Sensor::process(double _value, CRGB::HTMLColorCode colors[]) {
-    double prev = this->value;
-
     this->value = _value;
 
     // if (abs(this->value - prev) < 1e-9)

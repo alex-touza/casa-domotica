@@ -5,9 +5,10 @@
 #include "Joystick.h"
 
 Joystick::Joystick(int _pinX, int _pinY, int _buttonPin, int _deadzone = 10) : deadzone(_deadzone), pos({0, 0}),
-                                                               axisPins({EntradaAnalogica{_pinX},
-                                                                         EntradaAnalogica{_pinY}}), buttonPin(_buttonPin),
-                                                                         state({X, 0, false, true}){}
+                                                                               axisPins({EntradaAnalogica{_pinX},
+                                                                                         EntradaAnalogica{_pinY}}),
+                                                                               buttonPin(_buttonPin),
+                                                                               state({X, 0, true, 0}) {}
 
 bool Joystick::read() {
     // Operador OR que no curtcircuita perquè s'evaluïn els dos operands.
@@ -56,11 +57,11 @@ bool Joystick::readState() {
     bool active = this->read();
 
     if (this->state.idle && active) {
-        if (this->pos.x > this->pos.y + 10) {
+        if (abs(this->pos.x) > (abs(this->pos.y) + this->deadzone + 5)) {
             this->state.axis = X;
             this->state.pos = this->pos.x;
             this->state.idle = false;
-        } else if (this->pos.y > this->pos.x + 10) {
+        } else if (abs(this->pos.y) > (abs(this->pos.x) + this->deadzone + 5)) {
             this->state.axis = Y;
             this->state.pos = this->pos.y;
             this->state.idle = false;
@@ -69,7 +70,27 @@ bool Joystick::readState() {
         this->state.pos = *this->getPos(this->state.axis);
     } else {
         this->state.idle = true;
+        this->state.lastActive = millis();
     }
 
+    Serial.println("idle \t" + String(this->state.idle));
+    Serial.println("axis \t" + String(this->state.axis));
+    Serial.println("pos \t" + String(this->state.pos));
+    //Serial.println("pressed \t" + String(this->isPressed()));
+    Serial.println("pressed deb \t" + String(this->isPressed(true)));
+    Serial.println("last active \t" + String(this->state.lastActive));
+    Serial.println("raw");
+    Serial.println("\t x " + String(this->pos.x));
+    Serial.println("\t y " + String(this->pos.y));
+    Serial.println();
+;
     return active;
+}
+
+bool Joystick::State::operator==(const Joystick::State& other) const {
+    return this->idle ? other.idle : (!other.idle && other.axis == this->axis && other.pos == this->pos);
+}
+
+bool Joystick::State::operator!=(const Joystick::State& other) const {
+    return !(*this == other);
 }
