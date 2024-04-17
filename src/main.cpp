@@ -147,7 +147,7 @@ void loop() {
 
 
 
-            if (joystick.state.idle && (millis() - joystick.state.lastActive > 1000 || joystick.state.lastActive == 0) ) {
+            if (joystick.state.idle ) {
                 pantalla.idle();
             } else if (joystick.state.axis == DIR_ILUM) {
                 // Control de la brillantor
@@ -157,7 +157,7 @@ void loop() {
                         // Pujar/baixar la brillantor 16 unitats, o 32 si el joystick està al màxim
                         iluminacio.changeBrightness(
                                 (joystick.state.pos < 0 ? -1 : 1) * (8 * (1 + (abs(joystick.state.pos) > 90))));
-                                delay(150);
+                                delay(200);
                     }
 
                     pantalla.update("Brillantor llums", iluminacio.brightnessStr(),
@@ -172,7 +172,7 @@ void loop() {
 
                 if (pantalla.screenId == Pantalles::TEMPSET && abs(joystick.state.pos) > 25) {
                     temperatura.setting += (joystick.state.pos < 0 ? -1 : 1) * (1 + (abs(joystick.state.pos) > 90));
-                    delay(150);
+                    delay(200);
                 }
 
                 pantalla.update("Establint temp", String(temperatura.setting) + " C", Pantalles::TEMPSET);
