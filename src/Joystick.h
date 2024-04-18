@@ -40,11 +40,24 @@ public:
 
     void begin();
 
+    struct State {
+        Axis axis;
+        int pos;
+        bool idle;
+        unsigned int lastActive;
+
+        bool operator==(const Joystick::State& other) const;
+        bool operator!=(const Joystick::State& other) const;
+    };
+
     // Retornen true si la posició ha canviat des de l'última lectura.
     bool read(Axis axis); // Llegir un eix
     bool read();          // Llegir els dos eixos
+    bool readState();     // Llegir i actualitzar state
 
-    bool isPressed(bool debounce);
+    State state;
+
+    bool isPressed(bool debounce = false);
 
     // Obtenir accés de només lectura a la posició d'un eix
     const int* getPos(Axis axis);

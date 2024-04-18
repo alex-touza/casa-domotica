@@ -11,9 +11,9 @@ class Range {
 private:
     int size;
     bool cycle;
-    const int* range;
 public:
-    Range(const int _range[], int _size, bool _cycle = false);
+    int* range;
+    Range(int _range[], int _size, bool _cycle = false);
 
     int getLevel(double n) const;
 };

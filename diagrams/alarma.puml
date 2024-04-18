@@ -1,0 +1,17 @@
+@startuml
+skinparam dpi 500
+start
+if (Obstacle detectat) is (sí) then
+	://TRIGGERED//; <<output>>
+
+else (no)
+	if (Alarma activa i botó premut) is (sí) then
+		://DEACTIVATED//; <<output>>
+	else if (botó premut) is (sí) then
+		://PRESSED//; <<output>>
+	else (no)
+		://IDLE//; <<output>>
+	endif
+endif
+end
+@enduml

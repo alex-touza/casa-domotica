@@ -3,13 +3,21 @@
 //
 
 #include "Temperatura.h"
+#include "Arduino.h"
 
 Temperatura::Temperatura(int initSetting, DHT* _dht, CRGB* _ledTemp, CRGB* _ledSetting, Motor* _fan) :
-        dht(_dht), ledSetting(_ledSetting), setting(initSetting), fan(_fan),
-        Sensor(_ledTemp, {Temperatura::tempRangesList, 4, true}) {}
+        dht(_dht), ledSetting(_ledSetting), setting(initSetting), fan(_fan), season(Temperatura::Seasons::SUMMER),
+        Sensor(_ledTemp, {Temperatura::seasons[0], 4, true}) {
+}
 
 void Temperatura::begin() {
     this->read();
+}
+
+void Temperatura::setSeason(Seasons _season) {
+    this->season = _season;
+    //this->range.range = _season == Temperatura::SUMMER ? Temperatura::summer : Temperatura::winter;
+    this->range.range = Temperatura::seasons[_season];
 }
 
 bool Temperatura::read() {
@@ -21,10 +29,6 @@ bool Temperatura::read() {
 
     int level = range.getLevel(this->value);
 
-    Serial.println(level);
-    Serial.println(this->value);
-    Serial.println();
-
     *ledSetting = Temperatura::settingColors[level];
 
     int dif = (int)(round(this->value) - this->setting);
@@ -35,8 +39,18 @@ bool Temperatura::read() {
 
     return this->process(this->value, Temperatura::tempColors);
 }
+// estiu, hivern
 
-const int Temperatura::tempRangesList[4] = {18, 20, 24, 26};
+/*
+int Temperatura::summer[4] = {20, 24, 26, 29};
+int Temperatura::winter[4] = {17, 21, 24, 26};
+ */
+
+int Temperatura::seasons[SEASONS][4] = {{20, 24, 26, 29}, {17, 21, 24, 26}};
+String Temperatura::seasonsName[SEASONS] = {"Estiu", "Hivern"};
+
 CRGB::HTMLColorCode Temperatura::tempColors[3] = {CRGB::Red, CRGB::Orange, CRGB::Green};
 
 CRGB::HTMLColorCode Temperatura::settingColors[3] = {CRGB::OrangeRed, CRGB::Green, CRGB::Blue};
+
+

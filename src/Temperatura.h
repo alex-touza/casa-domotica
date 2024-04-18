@@ -5,30 +5,46 @@
 #ifndef CASA_DOMOTICA_TEMPERATURA_H
 #define CASA_DOMOTICA_TEMPERATURA_H
 
+#define SEASONS 2
+
 #include "Sensor.h"
 #include "Pantalla.h"
 #include "Motor.h"
+
 
 // forward declaration per permetre friend Pantalla
 class Pantalla;
 
 class Temperatura : public Sensor {
 private:
-    static const int tempRangesList[];
+    /*
+    static int summer[4];
+    static int winter[4];
+     */
+    static int seasons[SEASONS][4];
     static CRGB::HTMLColorCode tempColors[];
     static CRGB::HTMLColorCode settingColors[];
 
     DHT* dht;
     CRGB* ledSetting;
     Motor* fan;
-
-    // Permetre a pantalla l'accés a membres privats.
-    friend Pantalla;
 public:
+    enum Seasons {
+        SUMMER = 0,
+        WINTER = 1
+    };
+
+    static String seasonsName[SEASONS];
+
     Temperatura(int initSetting, DHT* _dht, CRGB* _ledTemp, CRGB* _ledSetting, Motor* _fan);
 
     void begin() override;
+
     bool read() override;
+
+    void setSeason(Seasons _season);
+
+    Seasons season;
 
     int setting;
 

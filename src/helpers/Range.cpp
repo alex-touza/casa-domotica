@@ -5,7 +5,7 @@
 #include "Range.h"
 #include "Arduino.h"
 
-Range::Range(const int _range[], int _size, bool _cycle) : range(_range), size(_size), cycle(_cycle) {}
+Range::Range(int _range[], int _size, bool _cycle) : range(_range), size(_size), cycle(_cycle) {}
 
 // Obtenir posició de n dins el rang.
 // cycle fa que comenci i acabi en 0:

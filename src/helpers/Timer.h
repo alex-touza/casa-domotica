@@ -15,7 +15,8 @@ public:
     unsigned long duration;
     unsigned long start;
 
-    void reset();           // Reiniciar el temporitzador.
+    void reset();                 // Reiniciar el temporitzador.
+    void reset(unsigned long _duration);
     unsigned long delta() const;  // Temps des de l'últim reinici.
     bool hasFinished() const;
 };

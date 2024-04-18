@@ -9,18 +9,19 @@
 
 using CDPins::EntradaDigital;
 class Iluminacio : private LEDArray {
-private:
+protected:
     EntradaDigital button;
-
 public:
-    Iluminacio(int pinButton, CRGB* _leds[], int _ledsSize);
+
+    Iluminacio(int pinButton, CRGB** _leds, int _ledsSize);
 
     void begin();
-    void read();
+    bool read();
     void changeBrightness(int delta);
     void update();
 
-    bool on;
+
+    bool isOn;
     int brightness;
 
     String brightnessStr() const;

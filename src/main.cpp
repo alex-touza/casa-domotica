@@ -16,9 +16,18 @@ const int DEFAULT_TEMP = 24;
 enum Pantalles {
     ALT = -1,
     IDLE = 0,
+
+    // Pantalles d'interacció
     TEMPSET = 1,
     LIGHTSET = 2,
-    LIGHTOFF = 3
+    LIGHTOFF = 3,
+
+    // Pantalles d'informació
+    LIGHTTOGGLE = 4,
+    ALARMACTIVE = 5,
+    ALARMOFF = 6,
+    SEASONSET = 7,
+    TEMPRESET = 8
 };
 
 CRGB leds[8];
@@ -42,7 +51,7 @@ CRGB* alarmaLeds[]{leds + 3, leds + 4};
 
 Alarma alarma(25, 16, alarmaLeds, 2);
 Joystick joystick(34, 35, 14, 10);
-Timer joystickCooldown(250);
+//Timer joystickCooldown(500);
 
 Motor ventilador(23, 19, 5);
 
@@ -52,7 +61,7 @@ Humitat humitat(&dht, leds + 1);
 
 CRGB* ilumLeds[]{leds + 5, leds + 6, leds + 7};
 
-Iluminacio iluminacio(13, ilumLeds, 3);
+Iluminacio iluminacio(18, ilumLeds, 3);
 
 Pantalla pantalla(&temperatura, &humitat, &iluminacio);
 
@@ -66,7 +75,6 @@ void setup() {
     //obstacles.attachInterrupt<bool*>(SIGNALFALLING, ([](bool* _alarma) { *_alarma = true; }), &alarmaPtr);
 
     joystick.begin();
-    joystickCooldown.active = false;
 
     FastLED.addLeds<WS2812B, 27, GRB>(leds, 8); // NOLINT(*-static-accessed-through-instance)
     FastLED.setBrightness(80);
@@ -98,52 +106,85 @@ void loop() {
     temperatura.read(); // També fa funcionar el ventilador
     humitat.read();
 
-    bool joystickTempActiu = joystick.read(DIR_TEMP_SETTING);
-    bool joystickLlumActiu = joystick.read(DIR_ILUM);
-
     alarma.read();
-    iluminacio.read();
 
-    if (joystick.isPressed(true)) temperatura.setting = (int) round(temperatura.value);
+    if (alarma.active)
+        // Si l'alarma està activada, la resta no importa.
+        pantalla.update("ALARMA ACTIVADA", "ALERTA", Pantalles::ALARMACTIVE);
+
+    else if (alarma.state == Alarma::State::IDLE && pantalla.screenId == Pantalles::ALARMACTIVE)
+        // La pantalla mostra l'alerta, però l'alarma ja no està activa, forcem tornar a idle
+        pantalla.idle();
+
+    else if (alarma.state == Alarma::State::DEACTIVATED)
+        pantalla.updateTimed({"Alarma", "desactivada"}, 1500, Pantalles::ALARMOFF);
+    else {
+        // PRESSED indica que el botó s'ha premut sense estar l'alarma activa.
+        if (alarma.state == Alarma::State::PRESSED) {
+            String prevSeason = Temperatura::seasonsName[temperatura.season];
+            temperatura.setSeason(
+                    temperatura.season == Temperatura::WINTER ? Temperatura::SUMMER : Temperatura::WINTER);
+
+            pantalla.updateTimed(
+                    {"Epoca de l'any", prevSeason + " => " + (Temperatura::seasonsName[temperatura.season])},
+                    1500,
+                    SEASONSET);
+        } else if (iluminacio.read())
+            pantalla.updateTimed({iluminacio.isOn ? "Llums encesos" : "Llums apagats", ""}, 1500, LIGHTTOGGLE);
 
 
-    if (joystickLlumActiu) {
-        int pos = *joystick.getPos(DIR_ILUM);
+        // Si la pantalla és idle o ja és d'interacció, podem utilitzar les accions del joystick.
+        // Això és per evitar que les pantalles mostrades anteriorment (SEASONSET i LIGHTTOGGLE)
+        // desapareguin abans de temps.
+        if (pantalla.screenId < 4) {
 
-        if (iluminacio.on) {
-            if (joystickCooldown.hasFinished() && pantalla.screenId == Pantalles::LIGHTSET && abs(pos) > 25) {
-                joystickCooldown.active = true;
-                joystickCooldown.reset();
+            joystick.readState();
 
-                // Pujar/baixar la brillantor 16 unitats, o 32 si el joystick està al màxim
-                iluminacio.changeBrightness((pos < 0 ? -1 : 1) * (8 * (1 + (abs(pos) > 90))));
-            } else joystickCooldown.active = false;
+            if (joystick.isPressed(true) && pantalla.screenId == Pantalles::IDLE) {
+                temperatura.setting = (int) round(temperatura.value);
+                pantalla.updateTimed({"Temp restablerta", String(temperatura.setting) + " C"}, 1500, TEMPRESET);
+                Serial.println("temp reset pressed"); }
 
-            pantalla.update("Brillantor llums", iluminacio.brightnessStr(),
-                            Pantalles::LIGHTSET);
-        } else {
-            pantalla.update("Llums apagats", "", Pantalles::LIGHTOFF);
-            joystickCooldown.active = false;
+
+
+            if (joystick.state.idle ) {
+                pantalla.idle();
+            } else if (joystick.state.axis == DIR_ILUM) {
+                // Control de la brillantor
+
+                if (iluminacio.isOn) {
+                    if (pantalla.screenId == Pantalles::LIGHTSET && abs(joystick.state.pos) > 25) {
+                        // Pujar/baixar la brillantor 16 unitats, o 32 si el joystick està al màxim
+                        iluminacio.changeBrightness(
+                                (joystick.state.pos < 0 ? -1 : 1) * (8 * (1 + (abs(joystick.state.pos) > 90))));
+                                delay(200);
+                    }
+
+                    pantalla.update("Brillantor llums", iluminacio.brightnessStr(),
+                                    Pantalles::LIGHTSET);
+                } else
+                    pantalla.update("Llums apagats", "", Pantalles::LIGHTOFF);
+
+
+            } else if (joystick.state.axis == DIR_TEMP_SETTING) {
+                // Control de la consigna
+
+
+                if (pantalla.screenId == Pantalles::TEMPSET && abs(joystick.state.pos) > 25) {
+                    temperatura.setting += (joystick.state.pos < 0 ? -1 : 1) * (1 + (abs(joystick.state.pos) > 90));
+                    delay(200);
+                }
+
+                pantalla.update("Establint temp", String(temperatura.setting) + " C", Pantalles::TEMPSET);
+
+            }
         }
 
-
-    } else if (joystickTempActiu) {
-        int pos = *joystick.getPos(DIR_TEMP_SETTING);
-
-        if (joystickCooldown.hasFinished() && pantalla.screenId == Pantalles::TEMPSET && abs(pos) > 25) {
-            joystickCooldown.active = true;
-            joystickCooldown.reset();
-            temperatura.setting += (pos < 0 ? -1 : 1) * (1 + (abs(pos) > 90));
-        } else joystickCooldown.active = false;
-
-        pantalla.update("Establint temp", String(temperatura.setting) + " C", Pantalles::TEMPSET);
-
-    } else {
-        joystickCooldown.active = false;
-        pantalla.idle();
     }
 
 
+    //pantalla.checkTime();
+
     FastLED.show();
-    delay(100);
+    delay(50);
 }

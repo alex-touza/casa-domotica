@@ -12,7 +12,7 @@ private:
     const int ledsSize;
     CRGB** leds;
 public:
-    LEDArray(CRGB* _leds[], int _ledsSize);
+    LEDArray(CRGB** _leds, int _ledsSize);
 
     void setColorAll(CRGB color);
 };

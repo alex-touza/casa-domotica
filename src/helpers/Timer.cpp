@@ -6,7 +6,14 @@ Timer::Timer() : Timer(0) {}
 
 void Timer::reset() {
     this->start = millis();
+    this->active = true;
 }
+
+void Timer::reset(unsigned long _duration) {
+    this->duration = _duration;
+    this->reset();
+}
+
 
 unsigned long Timer::delta() const {
     return millis() - this->start;
@@ -15,3 +22,4 @@ unsigned long Timer::delta() const {
 bool Timer::hasFinished() const {
     return this->delta() > this->duration || !active;
 }
+
